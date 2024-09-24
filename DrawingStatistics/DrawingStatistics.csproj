@@ -7,8 +7,8 @@
     <ProjectGuid>{F1045CC7-3029-4A57-B561-C675D6659147}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AuditDrawing</RootNamespace>
-    <AssemblyName>AuditDrawing</AssemblyName>
+    <RootNamespace>DrawingStatistics</RootNamespace>
+    <AssemblyName>DrawingStatistics</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
