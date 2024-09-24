@@ -7,7 +7,7 @@ using Autodesk.AutoCAD.EditorInput;
 
 namespace DrawingStatistics
 {
-    public class BlockCountUtility
+    internal class BlockCountUtility
     {
         private const string keywordScreen = "Screen";
         private const string keywordTXT = "TXT";

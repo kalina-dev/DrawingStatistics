@@ -1,5 +1,4 @@
-﻿using System;
-using Autodesk.AutoCAD.ApplicationServices;
+﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.AutoCAD.EditorInput;
@@ -7,7 +6,7 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    public class DrawingCountUtility
+    internal class DrawingCountUtility
     {
         private const string keywordScreen = "Screen";
         private const string keywordTXT = "TXT";
