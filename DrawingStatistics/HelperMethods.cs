@@ -20,14 +20,14 @@ namespace DrawingStatistics
                 return false;
             }
 
-            if (!fileDetails[3].Contains("."))
+            if (!fileDetails[2].Contains("."))
             {
                 edt.WriteMessage("Incorrect windows file");
                 return false;
             }
 
-            string[] fileFormat = fileDetails[3].Split('.');
-            if (fileFormat[1].Trim() != keywordCSV || fileFormat[1].Trim() != keywordTXT || fileFormat[1].Trim() != keywordHTML)
+            string[] fileFormat = fileDetails[2].Split('.');
+            if (fileFormat[1].Trim().ToUpper() != keywordCSV && fileFormat[1].Trim().ToUpper() != keywordTXT && fileFormat[1].Trim().ToUpper() != keywordHTML)
             {
 
                 edt.WriteMessage("Incorrect file extension");

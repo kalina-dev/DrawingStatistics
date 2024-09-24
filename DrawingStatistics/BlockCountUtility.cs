@@ -100,7 +100,7 @@ namespace DrawingStatistics
                                     file.WriteLine("<html>");
                                     file.WriteLine("<head></head>");
                                     file.WriteLine("<body>");
-                                    file.WriteLine("<h2 style='background-color:yellow'>List of Blocks found in the drawing: </h2>");
+                                    file.WriteLine("<h2 style='background-color:yellow'>Number of Blocks found in the drawing: </h2>");
                                     file.WriteLine("<table border=1>");
                                     file.WriteLine("<tr><td>Block Name</td><td>Count</td></tr>");
                                     foreach (string blockname in arBlocks)
