@@ -14,6 +14,7 @@ namespace DrawingStatistics
         private const string keywordTXT = "TXT";
         private const string keywordCSV = "CSV";
         private const string keywordHTML = "HTML";
+        const string objectBlock = "INSERT";
         readonly string error = "Error encountered: ";
         Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
         Document doc = Application.DocumentManager.MdiActiveDocument;
@@ -44,44 +45,10 @@ namespace DrawingStatistics
 
         private void DisplayOrWriteBlockStatistics(string answer)
         {
-            throw new NotImplementedException();
-        }
-
-        private void DisplayBlockCountOnScreen()
-        {
-            try
-            {
-                // Get all the Blocks
-                var result = GatherBlocksAndCounts();
-                if (result != null)
-                {                    
-                    ArrayList arBlocks = new ArrayList();
-                    int[] arCounts = null;
-                    int i = 0;
-
-                    arBlocks = (ArrayList) result[0];
-                    arCounts = (int[]) result[1];
-
-                    // Display the results
-                    edt.WriteMessage("\nList of Blocks found in the drawing: ");
-                    foreach (string blockname in arBlocks)
-                    {
-                        edt.WriteMessage("\nBlock: " + blockname + " = " + arCounts[i]);
-                        i += 1;
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                edt.WriteMessage(error + ex.Message);
-            }
-        }
-
-        private void WriteBlockCountToTextFile()
-        {
             try
             {
                 ArrayList result = GatherBlocksAndCounts();
+
                 if (result != null)
                 {
                     ArrayList arBlocks = new ArrayList();
@@ -95,105 +62,59 @@ namespace DrawingStatistics
                     PromptResult pr = edt.GetString(pso);
                     string filename = pr.StringResult;
 
-                    if (filename != "")
+                    if (!string.IsNullOrEmpty(filename) && answer != keywordScreen)
                     {
                         using (StreamWriter file = new StreamWriter(filename))
                         {
-                            // Write the results to the text file
-                            file.WriteLine("\nList of Blocks found in the drawing: ");
-
-                            foreach (string blockname in arBlocks)
+                            switch (answer)
                             {
-                                file.WriteLine("\nBlock: " + blockname + " = " + arCounts[i]);
-                                i += 1;
-                            }                            
-                        }
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                edt.WriteMessage(error + ex.Message);
-            }
-        }
+                                case keywordTXT:
+                                    // Write the results to the text file
+                                    file.WriteLine("\nList of Blocks found in the drawing: ");
 
-        private void WriteBlockCountToCSVFile()
-        {
-            try
-            {
-                ArrayList result = GatherBlocksAndCounts();
-                if (result != null)
-                {
-                    ArrayList arBlocks = new ArrayList();
-                    int[] arCounts = null;
-                    int i = 0;
-
-                    arBlocks = (ArrayList)result[0];
-                    arCounts = (int[])result[1];
-
-                    PromptStringOptions pso = new PromptStringOptions("Enter CSV filename and location: ");
-                    PromptResult pr = edt.GetString(pso);
-                    string filename = pr.StringResult;
-
-                    if (filename != "")
-                    {
-                        using (StreamWriter file = new StreamWriter(filename))
-                        {
-                            // Write the results to the text file
-                            file.WriteLine("List of Blocks found in the drawing: ");
-                            file.WriteLine("Block Name, Count");
-                            foreach (string blockname in arBlocks)
-                            {
-                                file.Write("\nBlock: " + blockname + "," + arCounts[i]);
-                                i += 1;
+                                    foreach (string blockname in arBlocks)
+                                    {
+                                        file.WriteLine("\nBlock: " + blockname + " = " + arCounts[i]);
+                                        i += 1;
+                                    }
+                                    break;
+                                case keywordCSV:
+                                    // Write the results to the text file
+                                    file.WriteLine("List of Blocks found in the drawing: ");
+                                    file.WriteLine("Block Name, Count");
+                                    foreach (string blockname in arBlocks)
+                                    {
+                                        file.Write("\nBlock: " + blockname + "," + arCounts[i]);
+                                        i += 1;
+                                    }
+                                    break;
+                                case keywordHTML:
+                                    // Write the results to the HTML file
+                                    file.WriteLine("<html>");
+                                    file.WriteLine("<head></head>");
+                                    file.WriteLine("<body>");
+                                    file.WriteLine("<h2 style='background-color:yellow'>List of Blocks found in the drawing: </h2>");
+                                    file.WriteLine("<table border=1>");
+                                    file.WriteLine("<tr><td>Block Name</td><td>Count</td></tr>");
+                                    foreach (string blockname in arBlocks)
+                                    {
+                                        file.Write("<tr><td>Block:" + blockname + " </td><td style='color:blue'>" + arCounts[i] + "</td></tr>");
+                                        i += 1;
+                                    }
+                                    file.WriteLine("</table>");
+                                    file.WriteLine("</body>");
+                                    file.WriteLine("</html>");
+                                    break;
                             }
                         }
                     }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                edt.WriteMessage(error + ex.Message);
-            }
-        }
-
-        private void WriteBlockCountToHTMLFile()
-        {
-            try
-            {
-                ArrayList result = GatherBlocksAndCounts();
-                if (result != null)
-                {
-                    ArrayList arBlocks = new ArrayList();
-                    int[] arCounts = null;
-                    int i = 0;
-
-                    arBlocks = (ArrayList)result[0];
-                    arCounts = (int[])result[1];
-
-                    PromptStringOptions pso = new PromptStringOptions("Enter HTML filename and location: ");
-                    PromptResult pr = edt.GetString(pso);
-                    string filename = pr.StringResult;
-
-                    if (filename != "")
+                    else
                     {
-                        using (StreamWriter file = new StreamWriter(filename))
+                        edt.WriteMessage("\nNumber of Blocks found in the drawing: ");
+                        foreach (string blockname in arBlocks)
                         {
-                            // Write the results to the HTML file
-                            file.WriteLine("<html>");
-                            file.WriteLine("<head></head>");
-                            file.WriteLine("<body>");
-                            file.WriteLine("<h2 style='background-color:yellow'>List of Blocks found in the drawing: </h2>");
-                            file.WriteLine("<table border=1>");
-                            file.WriteLine("<tr><td>Block Name</td><td>Count</td></tr>");
-                            foreach (string blockname in arBlocks)
-                            {
-                                file.Write("<tr><td>Block:" + blockname + " </td><td style='color:blue'>" + arCounts[i] + "</td></tr>");
-                                i += 1;
-                            }
-                            file.WriteLine("</table>");
-                            file.WriteLine("</body>");
-                            file.WriteLine("</html>");
+                            edt.WriteMessage("\nBlock: " + blockname + " = " + arCounts[i]);
+                            i += 1;
                         }
                     }
                 }
@@ -213,13 +134,12 @@ namespace DrawingStatistics
             {
                 using (Transaction trans = db.TransactionManager.StartTransaction())
                 {
+                    string blockName = "";
                     // Get all the Blocks
                     TypedValue[] tv = new TypedValue[1];
-                    tv.SetValue(new TypedValue((int)DxfCode.Start, "INSERT"), 0);
+                    tv.SetValue(new TypedValue((int)DxfCode.Start, objectBlock), 0);
                     PromptSelectionResult psr = edt.SelectAll(new SelectionFilter(tv));
 
-                    // Get all the unique Blocks and store in an ArrayList collection then sort the array
-                    string blockName = "";
                     var blks = psr.Value.GetObjectIds();
                     ArrayList blkCol = new ArrayList();
                     int iCount = 0;
