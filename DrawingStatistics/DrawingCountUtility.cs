@@ -18,7 +18,7 @@ namespace DrawingStatistics
         const string objectLwPolyline = "LWPOLYLINE";
         const string objectArc = "ARC";
         const string objectBlock = "INSERT";
-        Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
+        readonly Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
 
         [CommandMethod("CountDrawingObjects")]
         public void CountDrawingObjects()

@@ -4,7 +4,6 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.AutoCAD.EditorInput;
-using System;
 
 namespace DrawingStatistics
 {
@@ -16,11 +15,11 @@ namespace DrawingStatistics
         private const string keywordHTML = "HTML";
         const string objectBlock = "INSERT";
         readonly string error = "Error encountered: ";
-        Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-        Document doc = Application.DocumentManager.MdiActiveDocument;
+        readonly Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
+        readonly Document doc = Application.DocumentManager.MdiActiveDocument;
 
-        [CommandMethod("CountBlock")]
-        public void CountBlock()
+        [CommandMethod("CountBlockAndShowStatistics")]
+        public void CountBlockAndShowStatistics()
         {
             PromptKeywordOptions pko = new PromptKeywordOptions("Select Block Statisticts Display Mode: ");
             pko.Keywords.Add(keywordScreen);
@@ -48,7 +47,7 @@ namespace DrawingStatistics
             try
             {
                 ArrayList result = GatherBlocksAndCounts();
-
+                string filename = string.Empty;
                 if (result != null)
                 {
                     ArrayList arBlocks = new ArrayList();
@@ -58,9 +57,12 @@ namespace DrawingStatistics
                     arBlocks = (ArrayList)result[0];
                     arCounts = (int[])result[1];
 
-                    PromptStringOptions pso = new PromptStringOptions("Enter TXT filename and location: ");
-                    PromptResult pr = edt.GetString(pso);
-                    string filename = pr.StringResult;
+                    if (answer != keywordScreen && answer != null)
+                    {
+                        PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and location: ");
+                        PromptResult pr = edt.GetString(pso);
+                        filename = pr.StringResult;
+                    }
 
                     if (!string.IsNullOrEmpty(filename) && answer != keywordScreen)
                     {
