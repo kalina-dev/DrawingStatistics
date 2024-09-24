@@ -5,7 +5,7 @@ using Autodesk.AutoCAD.Geometry;
 
 namespace DrawingStatistics
 {
-    internal class DrawingObjectsUtility
+    internal class DrawingUtility
     {
         const string Mtext1 = "Rotating MText";
         const string Mtext2 = "Rotated MText";
@@ -17,7 +17,7 @@ namespace DrawingStatistics
         const short red = 1;
         const short green = 3;
         const short blue = 5;
-        string error = "Error occured: ";
+        const string error = "Error occured: ";
 
         [CommandMethod("CreateAndCopyCircle")]
         public static void CreateAndCopyCircle()
@@ -90,7 +90,7 @@ namespace DrawingStatistics
                 }
                 catch (System.Exception ex)
                 {
-                    doc.Editor.WriteMessage("Error occured: " + ex.Message);
+                    doc.Editor.WriteMessage(error + ex.Message);
                     trans.Abort();
                 }
             }
@@ -141,7 +141,7 @@ namespace DrawingStatistics
                 }
                 catch (System.Exception ex)
                 {
-                    doc.Editor.WriteMessage("Error occured: " + ex.Message);
+                    doc.Editor.WriteMessage(error + ex.Message);
                     trans.Abort();
                 }
             }

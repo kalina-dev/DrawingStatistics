@@ -73,7 +73,7 @@
   <ItemGroup>
     <Compile Include="DrawingCountUtility.cs" />
     <Compile Include="BlockCountUtility.cs" />
-    <Compile Include="DrawingObjectsUtility.cs" />
+    <Compile Include="DrawingUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
