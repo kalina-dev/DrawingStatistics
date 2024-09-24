@@ -8,11 +8,16 @@ namespace DrawingStatistics
 {
     internal class DrawingCountUtility
     {
-        private const string keywordScreen = "Screen";
-        private const string keywordTXT = "TXT";
-        private const string keywordCSV = "CSV";
-        private const string keywordHTML = "HTML";
-        private readonly string error = string.Empty;
+        const string keywordScreen = "Screen";
+        const string keywordTXT = "TXT";
+        const string keywordCSV = "CSV";
+        const string keywordHTML = "HTML";
+        const string objectLine = "LINE";
+        const string objectMtext = "MTEXT";
+        const string objectLwPolyline = "LWPOLYLINE";
+        const string objectArc = "ARC";
+        const string objectBlock = "INSERT";
+        readonly string error = string.Empty;
         Editor edt;
         public DrawingCountUtility()
         {
@@ -33,7 +38,8 @@ namespace DrawingStatistics
             PromptResult res = edt.GetKeywords(pko);
             string answer = res.StringResult;
 
-            switch (answer) {
+            switch (answer)
+            {
                 case keywordScreen:
                     DisplayDrawingCountOnScreen();
                     break;
@@ -61,11 +67,11 @@ namespace DrawingStatistics
                 {
                     // Now, write the information to a file
                     int lineCount, mtxCount, plCount, arcCount, blkCount;
-                    lineCount = GetEntityCount("LINE");
-                    mtxCount = GetEntityCount("MTEXT");
-                    plCount = GetEntityCount("LWPOLYLINE");
-                    arcCount = GetEntityCount("ARC");
-                    blkCount = GetEntityCount("INSERT");
+                    lineCount = GetEntityCount(objectLine);
+                    mtxCount = GetEntityCount(objectMtext);
+                    plCount = GetEntityCount(objectLwPolyline);
+                    arcCount = GetEntityCount(objectArc);
+                    blkCount = GetEntityCount(objectBlock);
 
                     int totalCount = lineCount + mtxCount + plCount + arcCount + blkCount;
 
@@ -75,15 +81,15 @@ namespace DrawingStatistics
                         file.WriteLine("<html>");
                         file.WriteLine("<head></head>");
                         file.WriteLine("<body>");
-                        file.WriteLine("<h2 style='background-color:red'>List of Objects found in the drawing:</h2>");
+                        file.WriteLine("<h2 style='background-color:yellow'>List of Objects found in the drawing:</h2>");
                         file.WriteLine("<table border=1>");
                         file.WriteLine("<tr>");
-                        file.WriteLine("<td style='color:blue'>Lines</td>");
-                        file.WriteLine("<td style='color:blue'>MTexts</td>");
-                        file.WriteLine("<td style='color:blue'>Polylines</td>");
-                        file.WriteLine("<td style='color:blue'>Arcs</td>");
-                        file.WriteLine("<td style='color:blue'>Blocks</td>");
-                        file.WriteLine("<td style='color:blue'>Total</td></tr>");
+                        file.WriteLine("<td style='color:green'>Lines</td>");
+                        file.WriteLine("<td style='color:green'>MTexts</td>");
+                        file.WriteLine("<td style='color:green'>Polylines</td>");
+                        file.WriteLine("<td style='color:green'>Arcs</td>");
+                        file.WriteLine("<td style='color:green'>Blocks</td>");
+                        file.WriteLine("<td style='color:green'>Total</td></tr>");
                         file.WriteLine("</tr>");
                         file.WriteLine("<tr>");
                         file.WriteLine("<td>" + lineCount.ToString() + "</td>");
@@ -127,7 +133,7 @@ namespace DrawingStatistics
 
                     using (StreamWriter file = new StreamWriter(filename))
                     {
-                        file.WriteLine("List of Objects found in the drawing: ");
+                        file.WriteLine("Number of Objects found in the drawing: ");
                         file.WriteLine("Lines, MTexts, Polylines, Arcs, Blocks, Total");
                         file.WriteLine(lineCount.ToString() + "," + mtxCount.ToString() + "," + plCount.ToString() + "," + arcCount.ToString() + "," + blkCount.ToString() + "," + totalCount.ToString());
                     }
