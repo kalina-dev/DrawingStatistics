@@ -7,14 +7,27 @@ using Autodesk.AutoCAD.EditorInput;
 
 namespace DrawingStatistics
 {
-    public class BlockAuditUtility
+    public class BlockCountUtility
     {
-
-        [CommandMethod("AuditBlock")]
-        public void AuditBlock()
+        private const string keywordScreen = "Screen";
+        private const string keywordTXT = "TXT";
+        private const string keywordCSV = "CSV";
+        private const string keywordHTML = "HTML";
+        private readonly string error = string.Empty;
+        Editor edt;
+        Document doc;
+        Database db;
+        public BlockCountUtility()
         {
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
+            error = "Error encountered: ";
+            doc = Application.DocumentManager.MdiActiveDocument;
+            db = doc.Database;
+            edt = Application.DocumentManager.MdiActiveDocument.Editor;
+        }
 
+        [CommandMethod("CountBlock")]
+        public void CountBlock()
+        {
             PromptKeywordOptions pko = new PromptKeywordOptions("Select Display Mode: ");
             pko.Keywords.Add("Screen");
             pko.Keywords.Add("TXT");
@@ -28,25 +41,22 @@ namespace DrawingStatistics
             switch (answer)
             {
                 case "Screen":
-                    DisplayBlockAuditOnScreen();
+                    DisplayBlockCountOnScreen();
                     break;
                 case "TXT":
-                    WriteBlockAuditToTextFile();
+                    WriteBlockCountToTextFile();
                     break;
                 case "CSV":
-                    WriteBlockAuditToCSVFile();
+                    WriteBlockCountToCSVFile();
                     break;
                 case "HTML":
-                    WriteBlockAuditToHTMLFile();
+                    WriteBlockCountToHTMLFile();
                     break;
             }
         }
 
-        private void DisplayBlockAuditOnScreen()
+        private void DisplayBlockCountOnScreen()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 // Get all the Blocks
@@ -75,11 +85,8 @@ namespace DrawingStatistics
             }
         }
 
-        private void WriteBlockAuditToTextFile()
+        private void WriteBlockCountToTextFile()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 ArrayList result = GatherBlocksAndCounts();
@@ -118,11 +125,8 @@ namespace DrawingStatistics
             }
         }
 
-        private void WriteBlockAuditToCSVFile()
+        private void WriteBlockCountToCSVFile()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 ArrayList result = GatherBlocksAndCounts();
@@ -161,11 +165,8 @@ namespace DrawingStatistics
             }
         }
 
-        private void WriteBlockAuditToHTMLFile()
+        private void WriteBlockCountToHTMLFile()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 ArrayList result = GatherBlocksAndCounts();
@@ -211,12 +212,8 @@ namespace DrawingStatistics
             }
         }
 
-
         private ArrayList GatherBlocksAndCounts()
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-            Editor edt = doc.Editor;
             ArrayList result = new ArrayList();
 
             try

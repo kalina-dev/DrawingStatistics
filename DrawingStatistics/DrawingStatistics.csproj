@@ -71,8 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawingAuditUtility.cs" />
-    <Compile Include="BlockAuditUtility.cs" />
+    <Compile Include="DrawingCountUtility.cs" />
+    <Compile Include="BlockCountUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

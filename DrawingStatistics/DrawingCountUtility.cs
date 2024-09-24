@@ -7,44 +7,51 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    public class DrawingAuditUtility
+    public class DrawingCountUtility
     {
-        [CommandMethod("DrawingStatistics")]
-        public void AuditDrawingOptions()
+        private const string keywordScreen = "Screen";
+        private const string keywordTXT = "TXT";
+        private const string keywordCSV = "CSV";
+        private const string keywordHTML = "HTML";
+        private readonly string error = string.Empty;
+        Editor edt;
+        public DrawingCountUtility()
         {
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
+            error = "Error encountered: ";
+            edt = Application.DocumentManager.MdiActiveDocument.Editor;
+        }
 
+        [CommandMethod("DrawingStatistics")]
+        public void CountDrawingOptions()
+        {
             PromptKeywordOptions pko = new PromptKeywordOptions("Select Display Mode: ");
-            pko.Keywords.Add("Screen");
-            pko.Keywords.Add("TXT");
-            pko.Keywords.Add("CSV");
-            pko.Keywords.Add("HTML");
+            pko.Keywords.Add(keywordScreen);
+            pko.Keywords.Add(keywordTXT);
+            pko.Keywords.Add(keywordCSV);
+            pko.Keywords.Add(keywordHTML);
             pko.AllowNone = true;
 
             PromptResult res = edt.GetKeywords(pko);
             string answer = res.StringResult;
 
             switch (answer) {
-                case "Screen":
-                    DisplayDrawingAuditOnScreen();
+                case keywordScreen:
+                    DisplayDrawingCountOnScreen();
                     break;
-                case "TXT":
-                    WriteDrawingAuditToTextFile();
+                case keywordTXT:
+                    WriteDrawingCountToTextFile();
                     break;
-                case "CSV":
-                    WriteDrawingAuditToCSVFile();
+                case keywordCSV:
+                    WriteDrawingCountToCSVFile();
                     break;
-                case "HTML":
-                    WriteDrawingAuditToHTMLFile();
+                case keywordHTML:
+                    WriteDrawingCountToHTMLFile();
                     break;
             }
         }
 
-        private void WriteDrawingAuditToHTMLFile()
+        private void WriteDrawingCountToHTMLFile()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 PromptStringOptions pso = new PromptStringOptions("Enter HTML filename and location: ");
@@ -69,7 +76,7 @@ namespace DrawingStatistics
                         file.WriteLine("<html>");
                         file.WriteLine("<head></head>");
                         file.WriteLine("<body>");
-                        file.WriteLine("<h2 style='background-color:yellow'>List of Objects found in the drawing:</h2>");
+                        file.WriteLine("<h2 style='background-color:red'>List of Objects found in the drawing:</h2>");
                         file.WriteLine("<table border=1>");
                         file.WriteLine("<tr>");
                         file.WriteLine("<td style='color:blue'>Lines</td>");
@@ -95,15 +102,12 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
-        private void WriteDrawingAuditToCSVFile()
+        private void WriteDrawingCountToCSVFile()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 PromptStringOptions pso = new PromptStringOptions("Enter CSV filename and location: ");
@@ -129,18 +133,19 @@ namespace DrawingStatistics
                         file.WriteLine(lineCount.ToString() + "," + mtxCount.ToString() + "," + plCount.ToString() + "," + arcCount.ToString() + "," + blkCount.ToString() + "," + totalCount.ToString());
                     }
                 }
+                else
+                {
+                    edt.WriteMessage("File not found");
+                }
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
-        private void WriteDrawingAuditToTextFile()
+        private void WriteDrawingCountToTextFile()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 PromptStringOptions pso = new PromptStringOptions("Enter TXT filename and location: ");
@@ -173,15 +178,12 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
-        public void DisplayDrawingAuditOnScreen()
+        public void DisplayDrawingCountOnScreen()
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             try
             {
                 int lineCount, mtxCount, plCount, arcCount, blkCount;
@@ -204,15 +206,12 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
         private int GetEntityCount(string entityType)
         {
-            // Get the Editor object
-            Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-
             // Get all the Objects in the specified entityType
             TypedValue[] tv = new TypedValue[1];
             tv.SetValue(new TypedValue((int)DxfCode.Start, entityType), 0);
@@ -226,77 +225,5 @@ namespace DrawingStatistics
             }
             return objCount;
         }
-
-        //private int GetLines()
-        //{
-        //    // Get all the Line Objects
-        //    TypedValue[] tv = new TypedValue[1];
-        //    tv.SetValue(new TypedValue((int)DxfCode.Start, "LINE"), 0);
-        //    SelectionFilter filter = new SelectionFilter(tv);
-        //    PromptSelectionResult ssPrompt = edt.SelectAll(filter);
-        //    int lineCount = 0;
-        //    if (ssPrompt.Status == PromptStatus.OK)
-        //    {
-        //        SelectionSet ssLines = ssPrompt.Value;
-        //        lineCount = ssLines.Count;
-        //    }
-
-        //    return lineCount;
-        //}
-
-        //private int GetMTexts()
-        //{
-        //    // Get all the MText Objects                
-        //    TypedValue[] tv = new TypedValue[1];
-        //    tv.SetValue(new TypedValue((int)DxfCode.Start, "MTEXT"), 0);
-        //    SelectionFilter filter = new SelectionFilter(tv);
-        //    filter = new SelectionFilter(tv);
-        //    PromptSelectionResult ssPrompt = edt.SelectAll(filter);
-        //    ssPrompt = edt.SelectAll(filter);
-        //    int mtxCount = 0;
-        //    if (ssPrompt.Status == PromptStatus.OK)
-        //    {
-        //        SelectionSet ssMTexts = ssPrompt.Value;
-        //        mtxCount = ssMTexts.Count;
-        //    }
-        //    return mtxCount;
-        //}
-
-        //private int GetPolylines()
-        //{
-        //    // Get all the Polyline Objects
-        //    TypedValue[] tv = new TypedValue[1];
-        //    tv.SetValue(new TypedValue((int)DxfCode.Start, "LWPOLYLINE"), 0);
-        //    SelectionFilter filter = new SelectionFilter(tv);
-        //    filter = new SelectionFilter(tv);
-        //    PromptSelectionResult ssPrompt = edt.SelectAll(filter);
-        //    ssPrompt = edt.SelectAll(filter);
-        //    int plCount = 0;
-        //    if (ssPrompt.Status == PromptStatus.OK)
-        //    {
-        //        SelectionSet ssPolyline = ssPrompt.Value;
-        //        plCount = ssPolyline.Count;
-        //    }
-        //    return plCount;
-        //}
-
-        //private int GetArcs()
-        //{
-        //    // Get all the Arc Objects
-        //    TypedValue[] tv = new TypedValue[1];
-        //    tv.SetValue(new TypedValue((int)DxfCode.Start, "ARC"), 0);
-        //    SelectionFilter filter = new SelectionFilter(tv);
-        //    filter = new SelectionFilter(tv);
-        //    PromptSelectionResult ssPrompt = edt.SelectAll(filter);
-        //    ssPrompt = edt.SelectAll(filter);
-        //    int arcCount = 0;
-        //    if (ssPrompt.Status == PromptStatus.OK)
-        //    {
-        //        SelectionSet ssArc = ssPrompt.Value;
-        //        arcCount = ssArc.Count;
-        //    }
-        //    return arcCount;
-        //}
-
     }
 }
