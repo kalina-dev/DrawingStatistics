@@ -64,6 +64,11 @@ namespace DrawingStatistics
                     PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
                     PromptResult pr = edt.GetString(pso);
                     filename = pr.StringResult;
+
+                    if (!HelperMethods.CheckFile(filename, edt, keywordCSV, keywordTXT, keywordHTML))
+                    {
+                        edt.WriteMessage(error);
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(filename) && answer != keywordScreen)

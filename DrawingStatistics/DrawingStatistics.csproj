@@ -75,6 +75,7 @@
     <Compile Include="DrawingCountUtility.cs" />
     <Compile Include="BlockCountUtility.cs" />
     <Compile Include="DrawingUtility.cs" />
+    <Compile Include="HelperMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

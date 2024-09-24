@@ -59,9 +59,14 @@ namespace DrawingStatistics
 
                     if (answer != keywordScreen && answer != null)
                     {
-                        PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and location: ");
+                        PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
                         PromptResult pr = edt.GetString(pso);
                         filename = pr.StringResult;
+
+                        if (!HelperMethods.CheckFile(filename, edt, keywordCSV, keywordTXT, keywordHTML))
+                        {
+                            edt.WriteMessage(error);
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(filename) && answer != keywordScreen)
@@ -72,7 +77,7 @@ namespace DrawingStatistics
                             {
                                 case keywordTXT:
                                     // Write the results to the text file
-                                    file.WriteLine("\nList of Blocks found in the drawing: ");
+                                    file.WriteLine("Number of Blocks found in the drawing: ");
 
                                     foreach (string blockname in arBlocks)
                                     {
@@ -82,7 +87,7 @@ namespace DrawingStatistics
                                     break;
                                 case keywordCSV:
                                     // Write the results to the text file
-                                    file.WriteLine("List of Blocks found in the drawing: ");
+                                    file.WriteLine("Number of Blocks found in the drawing: ");
                                     file.WriteLine("Block Name, Count");
                                     foreach (string blockname in arBlocks)
                                     {
