@@ -6,208 +6,126 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    internal class DrawingCountUtility
+    public class DrawingCountUtility
     {
         const string keywordScreen = "Screen";
         const string keywordTXT = "TXT";
         const string keywordCSV = "CSV";
         const string keywordHTML = "HTML";
+        readonly string error = "Error encountered: ";
         const string objectLine = "LINE";
         const string objectMtext = "MTEXT";
         const string objectLwPolyline = "LWPOLYLINE";
         const string objectArc = "ARC";
         const string objectBlock = "INSERT";
-        readonly string error = string.Empty;
-        Editor edt;
-        public DrawingCountUtility()
-        {
-            error = "Error encountered: ";
-            edt = Application.DocumentManager.MdiActiveDocument.Editor;
-        }
+        Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
 
-        [CommandMethod("DrawingStatistics")]
-        public void CountDrawingOptions()
+        [CommandMethod("CountDrawingObjects")]
+        public void CountDrawingObjects()
         {
-            PromptKeywordOptions pko = new PromptKeywordOptions("Select Display Mode: ");
+            PromptKeywordOptions pko = new PromptKeywordOptions("Select Object Statistics Display Mode: ");
             pko.Keywords.Add(keywordScreen);
             pko.Keywords.Add(keywordTXT);
             pko.Keywords.Add(keywordCSV);
             pko.Keywords.Add(keywordHTML);
-            pko.AllowNone = true;
+            pko.AllowNone = false;
 
             PromptResult res = edt.GetKeywords(pko);
             string answer = res.StringResult;
+            edt.WriteMessage("Your choice is " + answer);
 
-            switch (answer)
+            if (answer != null)
             {
-                case keywordScreen:
-                    DisplayDrawingCountOnScreen();
-                    break;
-                case keywordTXT:
-                    WriteDrawingCountToTextFile();
-                    break;
-                case keywordCSV:
-                    WriteDrawingCountToCSVFile();
-                    break;
-                case keywordHTML:
-                    WriteDrawingCountToHTMLFile();
-                    break;
+                DisplayOrWriteObjectStatistics(answer);
+            }
+            else
+            {
+                edt.WriteMessage("No response.");
             }
         }
 
-        private void WriteDrawingCountToHTMLFile()
+        private void DisplayOrWriteObjectStatistics(string answer)
         {
             try
             {
-                PromptStringOptions pso = new PromptStringOptions("Enter HTML filename and location: ");
-                PromptResult pr = edt.GetString(pso);
-                string filename = pr.StringResult;
+                string filename = string.Empty;
+                int lineCount, mtxCount, plCount, arcCount, blkCount;
 
-                if (filename != "")
+                lineCount = GetEntityCount(objectLine);
+                mtxCount = GetEntityCount(objectMtext);
+                plCount = GetEntityCount(objectLwPolyline);
+                arcCount = GetEntityCount(objectArc);
+                blkCount = GetEntityCount(objectBlock);
+
+                int totalCount = lineCount + mtxCount + plCount + arcCount + blkCount;
+
+                if (answer != keywordScreen && answer != null)
                 {
-                    // Now, write the information to a file
-                    int lineCount, mtxCount, plCount, arcCount, blkCount;
-                    lineCount = GetEntityCount(objectLine);
-                    mtxCount = GetEntityCount(objectMtext);
-                    plCount = GetEntityCount(objectLwPolyline);
-                    arcCount = GetEntityCount(objectArc);
-                    blkCount = GetEntityCount(objectBlock);
-
-                    int totalCount = lineCount + mtxCount + plCount + arcCount + blkCount;
-
-                    using (StreamWriter file = new StreamWriter(filename))
-                    {
-                        // Write the Header
-                        file.WriteLine("<html>");
-                        file.WriteLine("<head></head>");
-                        file.WriteLine("<body>");
-                        file.WriteLine("<h2 style='background-color:yellow'>List of Objects found in the drawing:</h2>");
-                        file.WriteLine("<table border=1>");
-                        file.WriteLine("<tr>");
-                        file.WriteLine("<td style='color:green'>Lines</td>");
-                        file.WriteLine("<td style='color:green'>MTexts</td>");
-                        file.WriteLine("<td style='color:green'>Polylines</td>");
-                        file.WriteLine("<td style='color:green'>Arcs</td>");
-                        file.WriteLine("<td style='color:green'>Blocks</td>");
-                        file.WriteLine("<td style='color:green'>Total</td></tr>");
-                        file.WriteLine("</tr>");
-                        file.WriteLine("<tr>");
-                        file.WriteLine("<td>" + lineCount.ToString() + "</td>");
-                        file.WriteLine("<td>" + mtxCount.ToString() + "</td>");
-                        file.WriteLine("<td>" + plCount.ToString() + "</td>");
-                        file.WriteLine("<td>" + arcCount.ToString() + "</td>");
-                        file.WriteLine("<td>" + blkCount.ToString() + "</td>");
-                        file.WriteLine("<td>" + totalCount.ToString() + "</td>");
-                        file.WriteLine("</tr>");
-                        file.WriteLine("</table>");
-                        file.WriteLine("</body>");
-                        file.WriteLine("</html>");
-                    }
+                    PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
+                    PromptResult pr = edt.GetString(pso);
+                    filename = pr.StringResult;
                 }
-            }
-            catch (System.Exception ex)
-            {
-                edt.WriteMessage(error + ex.Message);
-            }
-        }
 
-        private void WriteDrawingCountToCSVFile()
-        {
-            try
-            {
-                PromptStringOptions pso = new PromptStringOptions("Enter CSV filename and location: ");
-                PromptResult pr = edt.GetString(pso);
-                string filename = pr.StringResult;
-
-                if (filename != "")
+                if (!string.IsNullOrEmpty(filename) && answer != keywordScreen)
                 {
-                    // Now, write the information to a file
-                    int lineCount, mtxCount, plCount, arcCount, blkCount;
-                    lineCount = GetEntityCount("LINE");
-                    mtxCount = GetEntityCount("MTEXT");
-                    plCount = GetEntityCount("LWPOLYLINE");
-                    arcCount = GetEntityCount("ARC");
-                    blkCount = GetEntityCount("INSERT");
-
-                    int totalCount = lineCount + mtxCount + plCount + arcCount + blkCount;
-
                     using (StreamWriter file = new StreamWriter(filename))
                     {
-                        file.WriteLine("Number of Objects found in the drawing: ");
-                        file.WriteLine("Lines, MTexts, Polylines, Arcs, Blocks, Total");
-                        file.WriteLine(lineCount.ToString() + "," + mtxCount.ToString() + "," + plCount.ToString() + "," + arcCount.ToString() + "," + blkCount.ToString() + "," + totalCount.ToString());
+                        switch (answer)
+                        {
+                            case keywordTXT:
+                                file.WriteLine("\nNumber of Objects found in the drawing: ");
+                                file.WriteLine("\nLines: " + lineCount.ToString());
+                                file.WriteLine("\nMTexts: " + mtxCount.ToString());
+                                file.WriteLine("\nPoylines: " + plCount.ToString());
+                                file.WriteLine("\nArcs: " + arcCount.ToString());
+                                file.WriteLine("\nBlocks: " + blkCount.ToString());
+                                file.WriteLine("\nTotal Objects Count: " + totalCount.ToString());
+                                break;
+                            case keywordCSV:
+                                file.WriteLine("Number of Objects found in the drawing: ");
+                                file.WriteLine("Lines, MTexts, Polylines, Arcs, Blocks, Total");
+                                file.WriteLine(lineCount.ToString() + "," + mtxCount.ToString() + "," + plCount.ToString() + "," + arcCount.ToString() + "," + blkCount.ToString() + "," + totalCount.ToString());
+                                break;
+                            case keywordHTML:
+                                file.WriteLine("<html>");
+                                file.WriteLine("<head></head>");
+                                file.WriteLine("<body>");
+                                file.WriteLine("<h2 style='background-color:yellow'>List of Objects found in the drawing:</h2>");
+                                file.WriteLine("<table border=1>");
+                                file.WriteLine("<tr>");
+                                file.WriteLine("<td style='color:green'>Lines</td>");
+                                file.WriteLine("<td style='color:green'>MTexts</td>");
+                                file.WriteLine("<td style='color:green'>Polylines</td>");
+                                file.WriteLine("<td style='color:green'>Arcs</td>");
+                                file.WriteLine("<td style='color:green'>Blocks</td>");
+                                file.WriteLine("<td style='color:green'>Total</td></tr>");
+                                file.WriteLine("</tr>");
+                                file.WriteLine("<tr>");
+                                file.WriteLine("<td>" + lineCount.ToString() + "</td>");
+                                file.WriteLine("<td>" + mtxCount.ToString() + "</td>");
+                                file.WriteLine("<td>" + plCount.ToString() + "</td>");
+                                file.WriteLine("<td>" + arcCount.ToString() + "</td>");
+                                file.WriteLine("<td>" + blkCount.ToString() + "</td>");
+                                file.WriteLine("<td>" + totalCount.ToString() + "</td>");
+                                file.WriteLine("</tr>");
+                                file.WriteLine("</table>");
+                                file.WriteLine("</body>");
+                                file.WriteLine("</html>");
+                                break;
+                        }
                     }
                 }
                 else
                 {
-                    edt.WriteMessage("File not found");
+                    // Now, simply display the results on the screen
+                    edt.WriteMessage("\nList of Objects found in the drawing: ");
+                    edt.WriteMessage("\nLines: " + lineCount.ToString());
+                    edt.WriteMessage("\nMTexts: " + mtxCount.ToString());
+                    edt.WriteMessage("\nPoylines: " + plCount.ToString());
+                    edt.WriteMessage("\nArcs: " + arcCount.ToString());
+                    edt.WriteMessage("\nBlocks: " + blkCount.ToString());
+                    edt.WriteMessage("\nTotal Objects Count: " + totalCount.ToString());
                 }
-            }
-            catch (System.Exception ex)
-            {
-                edt.WriteMessage(error + ex.Message);
-            }
-        }
-
-        private void WriteDrawingCountToTextFile()
-        {
-            try
-            {
-                PromptStringOptions pso = new PromptStringOptions("Enter TXT filename and location: ");
-                PromptResult pr = edt.GetString(pso);
-                string filename = pr.StringResult;
-
-                if (filename != "")
-                {
-                    // Now, write the information to a file
-                    int lineCount, mtxCount, plCount, arcCount, blkCount;
-                    lineCount = GetEntityCount("LINE");
-                    mtxCount = GetEntityCount("MTEXT");
-                    plCount = GetEntityCount("LWPOLYLINE");
-                    arcCount = GetEntityCount("ARC");
-                    blkCount = GetEntityCount("INSERT");
-
-                    int totalCount = lineCount + mtxCount + plCount + arcCount + blkCount;
-
-                    using (StreamWriter file = new StreamWriter(filename))
-                    {
-                        file.WriteLine("\nList of Objects found in the drawing: ");
-                        file.WriteLine("\nLines: " + lineCount.ToString());
-                        file.WriteLine("\nMTexts: " + mtxCount.ToString());
-                        file.WriteLine("\nPoylines: " + plCount.ToString());
-                        file.WriteLine("\nArcs: " + arcCount.ToString());
-                        file.WriteLine("\nBlocks: " + blkCount.ToString());
-                        file.WriteLine("\nTotal Objects Count: " + totalCount.ToString());
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                edt.WriteMessage(error + ex.Message);
-            }
-        }
-
-        public void DisplayDrawingCountOnScreen()
-        {
-            try
-            {
-                int lineCount, mtxCount, plCount, arcCount, blkCount;
-                lineCount = GetEntityCount("LINE");
-                mtxCount = GetEntityCount("MTEXT");
-                plCount = GetEntityCount("LWPOLYLINE");
-                arcCount = GetEntityCount("ARC");
-                blkCount = GetEntityCount("INSERT");
-
-                int totalCount = lineCount + mtxCount + plCount + arcCount + blkCount;
-
-                // Now, display the results
-                edt.WriteMessage("\nList of Objects found in the drawing: ");
-                edt.WriteMessage("\nLines: " + lineCount.ToString());
-                edt.WriteMessage("\nMTexts: " + mtxCount.ToString());
-                edt.WriteMessage("\nPoylines: " + plCount.ToString());
-                edt.WriteMessage("\nArcs: " + arcCount.ToString());
-                edt.WriteMessage("\nBlocks: " + blkCount.ToString());
-                edt.WriteMessage("\nTotal Objects Count: " + totalCount.ToString());
             }
             catch (System.Exception ex)
             {

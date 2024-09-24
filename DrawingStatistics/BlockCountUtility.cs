@@ -4,55 +4,47 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.AutoCAD.EditorInput;
+using System;
 
 namespace DrawingStatistics
 {
-    internal class BlockCountUtility
+    public class BlockCountUtility
     {
         private const string keywordScreen = "Screen";
         private const string keywordTXT = "TXT";
         private const string keywordCSV = "CSV";
         private const string keywordHTML = "HTML";
-        private readonly string error = string.Empty;
-        Editor edt;
-        Document doc;
-        Database db;
-        public BlockCountUtility()
-        {
-            error = "Error encountered: ";
-            doc = Application.DocumentManager.MdiActiveDocument;
-            db = doc.Database;
-            edt = Application.DocumentManager.MdiActiveDocument.Editor;
-        }
+        readonly string error = "Error encountered: ";
+        Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
+        Document doc = Application.DocumentManager.MdiActiveDocument;
 
         [CommandMethod("CountBlock")]
         public void CountBlock()
         {
-            PromptKeywordOptions pko = new PromptKeywordOptions("Select Display Mode: ");
-            pko.Keywords.Add("Screen");
-            pko.Keywords.Add("TXT");
-            pko.Keywords.Add("CSV");
-            pko.Keywords.Add("HTML");
-            pko.AllowNone = true;
+            PromptKeywordOptions pko = new PromptKeywordOptions("Select Block Statisticts Display Mode: ");
+            pko.Keywords.Add(keywordScreen);
+            pko.Keywords.Add(keywordTXT);
+            pko.Keywords.Add(keywordCSV);
+            pko.Keywords.Add(keywordHTML);
+            pko.AllowNone = false;
 
             PromptResult res = edt.GetKeywords(pko);
             string answer = res.StringResult;
+            edt.WriteMessage("Your choice is " + answer);
 
-            switch (answer)
+            if (answer != null)
             {
-                case "Screen":
-                    DisplayBlockCountOnScreen();
-                    break;
-                case "TXT":
-                    WriteBlockCountToTextFile();
-                    break;
-                case "CSV":
-                    WriteBlockCountToCSVFile();
-                    break;
-                case "HTML":
-                    WriteBlockCountToHTMLFile();
-                    break;
+                DisplayOrWriteBlockStatistics(answer);
             }
+            else
+            {
+                edt.WriteMessage("No response.");
+            }
+        }
+
+        private void DisplayOrWriteBlockStatistics(string answer)
+        {
+            throw new NotImplementedException();
         }
 
         private void DisplayBlockCountOnScreen()
@@ -81,7 +73,7 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
@@ -121,7 +113,7 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
@@ -161,7 +153,7 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
@@ -208,13 +200,14 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
             }
         }
 
         private ArrayList GatherBlocksAndCounts()
         {
             ArrayList result = new ArrayList();
+            Database db = doc.Database;
 
             try
             {
@@ -268,7 +261,7 @@ namespace DrawingStatistics
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage("Error encountered: " + ex.Message);
+                edt.WriteMessage(error + ex.Message);
                 return null;
             }
             return result;
