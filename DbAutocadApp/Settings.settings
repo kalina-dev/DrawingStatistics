@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="connstr" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Server=DESKTOP-9VNM4E9\SQLEXPRESS;Database=AUTOCAD;Trusted_Connection = True;</Value>
+      <Value Profile="(Default)">Server=DESKTOP-XXXXX\SQLEXPRESS;Database=AUTOCAD;Trusted_Connection = True;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

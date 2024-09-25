@@ -25,7 +25,7 @@ namespace DbAutocadApp {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=DESKTOP-9VNM4E9\\SQLEXPRESS;Database=AUTOCAD;Trusted_Connection = True;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=DESKTOP-XXXXX\\SQLEXPRESS;Database=AUTOCAD;Trusted_Connection = True;")]
         public string connstr {
             get {
                 return ((string)(this["connstr"]));
