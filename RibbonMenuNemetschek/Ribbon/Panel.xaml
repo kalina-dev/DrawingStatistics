@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="NemetschekRinnonMenuApp.Panel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="76">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <Button Name="LineButton" ToolTipService.InitialShowDelay="500" Click="LineButton_OnClick">
+            <StackPanel>
+                <Image Source="../Images/Line_32x32.png" Width="32" Height="32"/>
+                <TextBlock TextAlignment="Center" Height="30" Width="44" Text="Line"/>
+            </StackPanel>
+            <Button.ToolTip>
+                <TextBlock Text="Draws a Line"/>
+            </Button.ToolTip>
+        </Button>
+    </StackPanel>
+</UserControl>
