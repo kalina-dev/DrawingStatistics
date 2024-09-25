@@ -63,7 +63,7 @@ namespace DrawingStatistics
                         PromptResult pr = edt.GetString(pso);
                         filename = pr.StringResult;
 
-                        if (!HelperMethods.CheckFile(filename, edt, keywordCSV, keywordTXT, keywordHTML))
+                        if (!HelperUtility.CheckFile(filename, edt, keywordCSV, keywordTXT, keywordHTML))
                         {
                             edt.WriteMessage(error);
                         }

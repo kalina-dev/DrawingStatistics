@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    public static class HelperMethods
+    public static class HelperUtility
     {
         public static bool CheckFile(string filename, Editor edt, string keywordCSV, string keywordTXT, string keywordHTML)
         {
