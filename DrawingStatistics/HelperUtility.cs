@@ -4,9 +4,9 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    internal static class HelperUtility
+    public static class HelperUtility
     {
-        const string path = @"C:\Autodesk";
+        const string path = "C:\\Autodesk";
         const string messageInvalidLocation = @"Incorrect file location";
         const string messageInvalidFile = @"Incorrect windows file";
         const string messageFileExtension = @"Incorrect file extension";
@@ -18,7 +18,7 @@ namespace DrawingStatistics
             }
 
             string[] fileDetails = keywordArray[0].Split('\\');
-            if ((keywordArray[0] + "\\" + keywordArray[1]) != path && fileDetails.Length > 3)
+            if ((fileDetails[0].ToUpper() + "\\" + fileDetails[1].ToUpper()) != path.ToUpper() || fileDetails.Length > 3)
             {
                 editor.WriteMessage(messageInvalidLocation);
                 return false;

@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace DbAutocadDemoNemetschek
 {
-    internal class DBRetrieveUtility
+    public class DBRetrieveUtility
     {        
         public string RetrieveAndDrawLines()
         {

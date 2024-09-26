@@ -5,7 +5,7 @@ using Autodesk.AutoCAD.Geometry;
 
 namespace DrawingStatistics
 {
-    internal class DrawingUtility
+    public class DrawingUtility
     {
         const string MtextOne = @"Rotating MText";
         const string MtextTwo = @"Rotated MText";

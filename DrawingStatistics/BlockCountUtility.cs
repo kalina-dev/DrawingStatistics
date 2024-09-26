@@ -7,7 +7,7 @@ using Autodesk.AutoCAD.EditorInput;
 
 namespace DrawingStatistics
 {
-    internal class BlockCountUtility
+    public class BlockCountUtility
     {
         private const string keywordScreen = @"Screen";
         private const string keywordTXT = @"TXT";
@@ -32,7 +32,7 @@ namespace DrawingStatistics
 
             PromptResult result = editor.GetKeywords(promptOptions);
             string answer = result.StringResult;
-            editor.WriteMessage("Selected answer is " + answer);
+            editor.WriteMessage(@"Selected answer is " + answer);
 
             if (answer != null)
             {
@@ -40,7 +40,7 @@ namespace DrawingStatistics
             }
             else
             {
-                editor.WriteMessage("No response.");
+                editor.WriteMessage(@"No response.");
             }
         }
 
@@ -63,9 +63,9 @@ namespace DrawingStatistics
                     {
                         PromptStringOptions promptOptions = new PromptStringOptions(@"Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
                         PromptResult promptResult = editor.GetString(promptOptions);
-                        string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
+                        
                         filename = promptResult.StringResult;
-
+                        string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
                         if (!HelperUtility.CheckFile(editor, paramKeyword))
                         {
                             editor.WriteMessage(error);
@@ -120,10 +120,10 @@ namespace DrawingStatistics
                     }
                     else
                     {
-                        editor.WriteMessage("\n" + titleMessage);
+                        editor.WriteMessage(@"\n" + titleMessage);
                         foreach (string blockname in arBlocks)
                         {
-                            editor.WriteMessage("\nBlock: " + blockname + " = " + arCounts[i]);
+                            editor.WriteMessage(@"\nBlock: " + blockname + " = " + arCounts[i]);
                             i += 1;
                         }
                     }

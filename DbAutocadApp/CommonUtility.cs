@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 
 namespace DbAutocadDemoNemetschek
 {
-    internal static class CommonUtility
+    public static class CommonUtility
     {
          public static int GetColorIndex(string colorName)
         {

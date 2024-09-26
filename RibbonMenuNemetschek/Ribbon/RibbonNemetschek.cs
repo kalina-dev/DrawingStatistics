@@ -8,7 +8,7 @@
     {
         public const string SAMPLERIBBONSTABID = "RibbonTab";
 
-        public const string SAMPLETABTITLE = "Add-ins";
+        public const string SAMPLETABTITLE = "Nemetschek";
 
         public static void SetupRibbon()
         {

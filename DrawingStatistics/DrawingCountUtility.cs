@@ -6,7 +6,7 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    internal class DrawingCountUtility
+    public class DrawingCountUtility
     {
         const string keywordScreen = @"Screen";
         const string keywordTXT = @"TXT";
@@ -22,8 +22,8 @@ namespace DrawingStatistics
         const string promptMessage = @"Select Object Statistics Display Mode: ";
         readonly Editor editor = Application.DocumentManager.MdiActiveDocument.Editor;
 
-        [CommandMethod("CountDrawingObjects")]
-        public void CountDrawingObjects()
+        [CommandMethod("CountObjectAndShowStatistics")]
+        public void CountObjectAndShowStatistics()
         {
             PromptKeywordOptions promptOptions = new PromptKeywordOptions(promptMessage);
             promptOptions.Keywords.Add(keywordScreen);
@@ -63,11 +63,11 @@ namespace DrawingStatistics
 
                 if (answer != keywordScreen && answer != null)
                 {
-                    PromptStringOptions promptOptions = new PromptStringOptions(@"Enter { answer } filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
+                    PromptStringOptions promptOptions = new PromptStringOptions(@"Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
                     PromptResult promptResult = editor.GetString(promptOptions);
-                    string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
+                    
                     filename = promptResult.StringResult;
-
+                    string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
                     if (!HelperUtility.CheckFile(editor, paramKeyword))
                     {
                         editor.WriteMessage(error);
@@ -82,56 +82,56 @@ namespace DrawingStatistics
                         {
                             case keywordTXT:
                                 file.WriteLine(titleMessage);
-                                file.WriteLine("\nLines: " + lineCount.ToString());
-                                file.WriteLine("\nMTexts: " + mtxCount.ToString());
-                                file.WriteLine("\nPoylines: " + plCount.ToString());
-                                file.WriteLine("\nArcs: " + arcCount.ToString());
-                                file.WriteLine("\nBlocks: " + blkCount.ToString());
-                                file.WriteLine("\nTotal Objects Count: " + totalCount.ToString());
+                                file.WriteLine(@"\nLines: " + lineCount.ToString());
+                                file.WriteLine("@\nMTexts: " + mtxCount.ToString());
+                                file.WriteLine(@"\nPoylines: " + plCount.ToString());
+                                file.WriteLine(@"\nArcs: " + arcCount.ToString());
+                                file.WriteLine(@"\nBlocks: " + blkCount.ToString());
+                                file.WriteLine(@"\nTotal Objects Count: " + totalCount.ToString());
                                 break;
                             case keywordCSV:
                                 file.WriteLine(titleMessage);
-                                file.WriteLine("Lines, MTexts, Polylines, Arcs, Blocks, Total");
+                                file.WriteLine(@"Lines, MTexts, Polylines, Arcs, Blocks, Total");
                                 file.WriteLine(lineCount.ToString() + "," + mtxCount.ToString() + "," + plCount.ToString() + "," + arcCount.ToString() + "," + blkCount.ToString() + "," + totalCount.ToString());
                                 break;
                             case keywordHTML:
-                                file.WriteLine("<html>");
-                                file.WriteLine("<head></head>");
-                                file.WriteLine("<body>");
-                                file.WriteLine("<h2 style='background-color:yellow'>List of Objects found in the drawing:</h2>");
-                                file.WriteLine("<table border=1>");
-                                file.WriteLine("<tr>");
-                                file.WriteLine("<td style='color:green'>Lines</td>");
-                                file.WriteLine("<td style='color:green'>MTexts</td>");
-                                file.WriteLine("<td style='color:green'>Polylines</td>");
-                                file.WriteLine("<td style='color:green'>Arcs</td>");
-                                file.WriteLine("<td style='color:green'>Blocks</td>");
-                                file.WriteLine("<td style='color:green'>Total</td></tr>");
-                                file.WriteLine("</tr>");
-                                file.WriteLine("<tr>");
-                                file.WriteLine("<td>" + lineCount.ToString() + "</td>");
-                                file.WriteLine("<td>" + mtxCount.ToString() + "</td>");
-                                file.WriteLine("<td>" + plCount.ToString() + "</td>");
-                                file.WriteLine("<td>" + arcCount.ToString() + "</td>");
-                                file.WriteLine("<td>" + blkCount.ToString() + "</td>");
-                                file.WriteLine("<td>" + totalCount.ToString() + "</td>");
-                                file.WriteLine("</tr>");
-                                file.WriteLine("</table>");
-                                file.WriteLine("</body>");
-                                file.WriteLine("</html>");
+                                file.WriteLine(@"<html>");
+                                file.WriteLine(@"<head></head>");
+                                file.WriteLine(@"<body>");
+                                file.WriteLine(@"<h2 style='background-color:yellow'>List of Objects found in the drawing:</h2>");
+                                file.WriteLine(@"<table border=1>");
+                                file.WriteLine(@"<tr>");
+                                file.WriteLine(@"<td style='color:green'>Lines</td>");
+                                file.WriteLine(@"<td style='color:green'>MTexts</td>");
+                                file.WriteLine(@"<td style='color:green'>Polylines</td>");
+                                file.WriteLine(@"<td style='color:green'>Arcs</td>");
+                                file.WriteLine(@"<td style='color:green'>Blocks</td>");
+                                file.WriteLine(@"<td style='color:green'>Total</td></tr>");
+                                file.WriteLine(@"</tr>");
+                                file.WriteLine(@"<tr>");
+                                file.WriteLine(@"<td>" + lineCount.ToString() + "</td>");
+                                file.WriteLine(@"<td>" + mtxCount.ToString() + "</td>");
+                                file.WriteLine(@"<td>" + plCount.ToString() + "</td>");
+                                file.WriteLine(@"<td>" + arcCount.ToString() + "</td>");
+                                file.WriteLine(@"<td>" + blkCount.ToString() + "</td>");
+                                file.WriteLine(@"<td>" + totalCount.ToString() + "</td>");
+                                file.WriteLine(@"</tr>");
+                                file.WriteLine(@"</table>");
+                                file.WriteLine(@"</body>");
+                                file.WriteLine(@"</html>");
                                 break;
                         }
                     }
                 }
                 else
                 {
-                    editor.WriteMessage("\n" + titleMessage);
-                    editor.WriteMessage("\nLines: " + lineCount.ToString());
-                    editor.WriteMessage("\nMTexts: " + mtxCount.ToString());
-                    editor.WriteMessage("\nPoylines: " + plCount.ToString());
-                    editor.WriteMessage("\nArcs: " + arcCount.ToString());
-                    editor.WriteMessage("\nBlocks: " + blkCount.ToString());
-                    editor.WriteMessage("\nTotal Objects Count: " + totalCount.ToString());
+                    editor.WriteMessage(@"\n" + titleMessage);
+                    editor.WriteMessage(@"\nLines: " + lineCount.ToString());
+                    editor.WriteMessage(@"\nMTexts: " + mtxCount.ToString());
+                    editor.WriteMessage(@"\nPoylines: " + plCount.ToString());
+                    editor.WriteMessage(@"\nArcs: " + arcCount.ToString());
+                    editor.WriteMessage(@"\nBlocks: " + blkCount.ToString());
+                    editor.WriteMessage(@"\nTotal Objects Count: " + totalCount.ToString());
                 }
             }
             catch (System.Exception ex)

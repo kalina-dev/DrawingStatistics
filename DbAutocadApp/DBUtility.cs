@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace DbAutocadDemoNemetschek
 {
-    internal static class DBUtility
+    public static class DBUtility
     {
         [CommandMethod("DBRun")]
         public static void DBRun()

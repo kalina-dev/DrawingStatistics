@@ -7,7 +7,7 @@ using System;
 
 namespace DbAutocadDemoNemetschek
 {
-    internal class DBLoadUtility
+    public class DBLoadUtility
     {
         public string LoadLines()
         {
