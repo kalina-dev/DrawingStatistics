@@ -36,8 +36,6 @@ namespace DbAutocadDemoNemetschek
                         double len = 0.0;
                         Line line = new Line();                        
                         SelectionSet ss = ssPrompt.Value;
-
-                        //sql = "INSERT INTO dbo.Lines (StartPtX, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype, Length) VALUES (" + startPtX + "," + startPtY + "," + endPtX + "," + endPtY + ",'" + layer + "','" + color + "','" + ltype + "'," + len + ")";
                         String sql = @"INSERT INTO dbo.Lines (StartPtX, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype, Length, Created) 
                                        VALUES(@StartPtX, @StartPtY, @EndPtX, @EndPtY, @Layer, @Color, @Linetype, @Length, @Created)";
                         conn.Open();
