@@ -25,14 +25,14 @@ namespace DbAutocadDemoNemetschek
                 if (dt.Rows.Count > 0)
                 {                    
                     Document activeDocument = Application.DocumentManager.MdiActiveDocument;
-                    Database db = activeDocument.Database;
+                    Database database = activeDocument.Database;
                     Editor editor = activeDocument.Editor;
 
                     activeDocument.LockDocument();
-                    using (Transaction transaction = db.TransactionManager.StartTransaction())
+                    using (Transaction transaction = database.TransactionManager.StartTransaction())
                     {
                         editor.WriteMessage("Drawing Lines!");
-                        BlockTable blockTable = transaction.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                        BlockTable blockTable = transaction.GetObject(database.BlockTableId, OpenMode.ForRead) as BlockTable;
                         BlockTableRecord record = transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;                        
 
                         int id;

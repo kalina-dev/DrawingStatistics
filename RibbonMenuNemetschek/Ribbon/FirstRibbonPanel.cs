@@ -38,7 +38,7 @@
         private void StackLoaded(object sender, RoutedEventArgs e)
         {
             ContentPresenter templatedParent = (ContentPresenter)((StackPanel)sender).TemplatedParent;
-            MyDataTemplate contentTemplate = (MyDataTemplate)templatedParent.ContentTemplate;
+            _ = (MyDataTemplate)templatedParent.ContentTemplate;
             templatedParent.Content = this.MainControl;
             this.Presenter = templatedParent;
             templatedParent.ContentTemplate = null;

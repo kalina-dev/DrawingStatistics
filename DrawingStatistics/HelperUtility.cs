@@ -10,7 +10,7 @@ namespace DrawingStatistics
         const string messageInvalidLocation = @"Incorrect file location";
         const string messageInvalidFile = @"Incorrect windows file";
         const string messageFileExtension = @"Incorrect file extension";
-        public static bool CheckFile(Editor edt, params string[] keywordArray)
+        public static bool CheckFile(Editor editor, params string[] keywordArray)
         {    
             if (!Directory.Exists(path))
             {
@@ -20,21 +20,20 @@ namespace DrawingStatistics
             string[] fileDetails = keywordArray[0].Split('\\');
             if ((keywordArray[0] + "\\" + keywordArray[1]) != path && fileDetails.Length > 3)
             {
-                edt.WriteMessage(messageInvalidLocation);
+                editor.WriteMessage(messageInvalidLocation);
                 return false;
             }
 
             if (!fileDetails[2].Contains("."))
             {
-                edt.WriteMessage(messageInvalidFile);
+                editor.WriteMessage(messageInvalidFile);
                 return false;
             }
 
             string[] fileFormat = fileDetails[2].Split('.');
-
             if (!Array.Exists(keywordArray, element => element == fileFormat[1].Trim().ToUpper()))
             {
-                edt.WriteMessage(messageFileExtension);
+                editor.WriteMessage(messageFileExtension);
                 return false;
             }
 

@@ -8,32 +8,33 @@ namespace DrawingStatistics
 {
     internal class DrawingCountUtility
     {
-        const string keywordScreen = "Screen";
-        const string keywordTXT = "TXT";
-        const string keywordCSV = "CSV";
-        const string keywordHTML = "HTML";
-        const string error = "Error encountered: ";
-        const string objectLine = "LINE";
-        const string objectMtext = "MTEXT";
-        const string objectLwPolyline = "LWPOLYLINE";
-        const string objectArc = "ARC";
-        const string objectBlock = "INSERT";
-        const string titleMessage = "INSERT";
-        readonly Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
+        const string keywordScreen = @"Screen";
+        const string keywordTXT = @"TXT";
+        const string keywordCSV = @"CSV";
+        const string keywordHTML = @"HTML";
+        const string error = @"Error encountered: ";
+        const string objectLine = @"LINE";
+        const string objectMtext = @"MTEXT";
+        const string objectLwPolyline = @"LWPOLYLINE";
+        const string objectArc = @"ARC";
+        const string objectBlock = @"INSERT";
+        const string titleMessage = @"Number of objects found in the drawing: ";
+        const string promptMessage = @"Select Object Statistics Display Mode: ";
+        readonly Editor editor = Application.DocumentManager.MdiActiveDocument.Editor;
 
         [CommandMethod("CountDrawingObjects")]
         public void CountDrawingObjects()
         {
-            PromptKeywordOptions pko = new PromptKeywordOptions("Select Object Statistics Display Mode: ");
-            pko.Keywords.Add(keywordScreen);
-            pko.Keywords.Add(keywordTXT);
-            pko.Keywords.Add(keywordCSV);
-            pko.Keywords.Add(keywordHTML);
-            pko.AllowNone = false;
+            PromptKeywordOptions promptOptions = new PromptKeywordOptions(promptMessage);
+            promptOptions.Keywords.Add(keywordScreen);
+            promptOptions.Keywords.Add(keywordTXT);
+            promptOptions.Keywords.Add(keywordCSV);
+            promptOptions.Keywords.Add(keywordHTML);
+            promptOptions.AllowNone = false;
 
-            PromptResult res = edt.GetKeywords(pko);
-            string answer = res.StringResult;
-            edt.WriteMessage("Selected answer is " + answer);
+            PromptResult result = editor.GetKeywords(promptOptions);
+            string answer = result.StringResult;
+            editor.WriteMessage(@"Selected answer is " + answer);
 
             if (answer != null)
             {
@@ -41,7 +42,7 @@ namespace DrawingStatistics
             }
             else
             {
-                edt.WriteMessage("No response.");
+                editor.WriteMessage(@"No response.");
             }
         }
 
@@ -62,14 +63,14 @@ namespace DrawingStatistics
 
                 if (answer != keywordScreen && answer != null)
                 {
-                    PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
-                    PromptResult pr = edt.GetString(pso);
-                    string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML};
-                    filename = pr.StringResult;
+                    PromptStringOptions promptOptions = new PromptStringOptions(@"Enter { answer } filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
+                    PromptResult promptResult = editor.GetString(promptOptions);
+                    string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
+                    filename = promptResult.StringResult;
 
-                    if (!HelperUtility.CheckFile(edt, paramKeyword))
+                    if (!HelperUtility.CheckFile(editor, paramKeyword))
                     {
-                        edt.WriteMessage(error);
+                        editor.WriteMessage(error);
                     }
                 }
 
@@ -124,18 +125,18 @@ namespace DrawingStatistics
                 }
                 else
                 {
-                    edt.WriteMessage(titleMessage);
-                    edt.WriteMessage("\nLines: " + lineCount.ToString());
-                    edt.WriteMessage("\nMTexts: " + mtxCount.ToString());
-                    edt.WriteMessage("\nPoylines: " + plCount.ToString());
-                    edt.WriteMessage("\nArcs: " + arcCount.ToString());
-                    edt.WriteMessage("\nBlocks: " + blkCount.ToString());
-                    edt.WriteMessage("\nTotal Objects Count: " + totalCount.ToString());
+                    editor.WriteMessage("\n" + titleMessage);
+                    editor.WriteMessage("\nLines: " + lineCount.ToString());
+                    editor.WriteMessage("\nMTexts: " + mtxCount.ToString());
+                    editor.WriteMessage("\nPoylines: " + plCount.ToString());
+                    editor.WriteMessage("\nArcs: " + arcCount.ToString());
+                    editor.WriteMessage("\nBlocks: " + blkCount.ToString());
+                    editor.WriteMessage("\nTotal Objects Count: " + totalCount.ToString());
                 }
             }
             catch (System.Exception ex)
             {
-                edt.WriteMessage(error + ex.Message);
+                editor.WriteMessage(error + ex.Message);
             }
         }
 
@@ -144,7 +145,7 @@ namespace DrawingStatistics
             TypedValue[] tv = new TypedValue[1];
             tv.SetValue(new TypedValue((int)DxfCode.Start, entityType), 0);
             SelectionFilter filter = new SelectionFilter(tv);
-            PromptSelectionResult ssPrompt = edt.SelectAll(filter);
+            PromptSelectionResult ssPrompt = editor.SelectAll(filter);
             int objCount = 0;
             if (ssPrompt.Status == PromptStatus.OK)
             {

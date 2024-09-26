@@ -36,11 +36,11 @@ namespace DbAutocadDemoNemetschek
         public static void AddXDataToEntity(string appName, Entity ent, int xdValue)
         {
             Document activeDocument = Application.DocumentManager.MdiActiveDocument;
-            Database db = activeDocument.Database;
-            Transaction tr = db.TransactionManager.StartTransaction();
+            Database database = activeDocument.Database;
+            Transaction tr = database.TransactionManager.StartTransaction();
             using (tr)
             {
-                RegAppTable regTable = (RegAppTable)tr.GetObject(db.RegAppTableId, OpenMode.ForRead);
+                RegAppTable regTable = (RegAppTable)tr.GetObject(database.RegAppTableId, OpenMode.ForRead);
 
                 if (!regTable.Has(appName))
                 {
