@@ -10,17 +10,16 @@ namespace DbAutocadDemoNemetschek
             InitializeComponent();
         }
 
-        private void btnLoadLines_Click(object sender, EventArgs e)
+        private void BtnLoadLines_Click(object sender, EventArgs e)
         {
-            DBLoadUtil dbload = new DBLoadUtil();
+            DBLoadUtility dbload = new DBLoadUtility();
             string result = dbload.LoadLines();
             lblInfo.Text = result;
         }
 
-        private void btnDrawLines_Click(object sender, EventArgs e)
+        private void BtnDrawLines_Click(object sender, EventArgs e)
         {
-            DBRetrieveUtil dbr = new DBRetrieveUtil();
-
+            DBRetrieveUtility dbr = new DBRetrieveUtility();
             string result = dbr.RetrieveAndDrawLines();
             lblInfo.Text = result;
         }

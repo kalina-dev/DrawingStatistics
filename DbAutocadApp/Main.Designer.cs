@@ -48,7 +48,7 @@
             this.btnLoadLines.TabIndex = 3;
             this.btnLoadLines.Text = "Load Lines to DB";
             this.btnLoadLines.UseVisualStyleBackColor = false;
-            this.btnLoadLines.Click += new System.EventHandler(this.btnLoadLines_Click);
+            this.btnLoadLines.Click += new System.EventHandler(this.BtnLoadLines_Click);
             // 
             // groupBox1
             // 
@@ -85,7 +85,7 @@
             this.btnDrawLines.TabIndex = 3;
             this.btnDrawLines.Text = "Retrieve Lines from DB";
             this.btnDrawLines.UseVisualStyleBackColor = false;
-            this.btnDrawLines.Click += new System.EventHandler(this.btnDrawLines_Click);
+            this.btnDrawLines.Click += new System.EventHandler(this.BtnDrawLines_Click);
             // 
             // lblInfo
             // 

@@ -7,16 +7,16 @@ using Autodesk.AutoCAD.EditorInput;
 
 namespace DrawingStatistics
 {
-    public class BlockCountUtility
+    internal class BlockCountUtility
     {
         private const string keywordScreen = "Screen";
         private const string keywordTXT = "TXT";
         private const string keywordCSV = "CSV";
         private const string keywordHTML = "HTML";
-        const string objectBlock = "INSERT";
+        private const string objectBlock = "INSERT";
         readonly string error = "Error encountered: ";
         readonly Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
-        readonly Document doc = Application.DocumentManager.MdiActiveDocument;
+        readonly Document activeDocument = Application.DocumentManager.MdiActiveDocument;
 
         [CommandMethod("CountBlockAndShowStatistics")]
         public void CountBlockAndShowStatistics()
@@ -59,11 +59,12 @@ namespace DrawingStatistics
 
                     if (answer != keywordScreen && answer != null)
                     {
-                        PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
+                        PromptStringOptions pso = new PromptStringOptions(@"Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
                         PromptResult pr = edt.GetString(pso);
+                        string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
                         filename = pr.StringResult;
 
-                        if (!HelperUtility.CheckFile(filename, edt, keywordCSV, keywordTXT, keywordHTML))
+                        if (!HelperUtility.CheckFile(edt, paramKeyword))
                         {
                             edt.WriteMessage(error);
                         }
@@ -88,29 +89,29 @@ namespace DrawingStatistics
                                 case keywordCSV:
                                     // Write the results to the text file
                                     file.WriteLine("Number of Blocks found in the drawing: ");
-                                    file.WriteLine("Block Name, Count");
+                                    file.WriteLine(@"Block Name, Count");
                                     foreach (string blockname in arBlocks)
                                     {
-                                        file.Write("\nBlock: " + blockname + "," + arCounts[i]);
+                                        file.Write(@"\nBlock: " + blockname + "," + arCounts[i]);
                                         i += 1;
                                     }
                                     break;
                                 case keywordHTML:
                                     // Write the results to the HTML file
-                                    file.WriteLine("<html>");
-                                    file.WriteLine("<head></head>");
-                                    file.WriteLine("<body>");
-                                    file.WriteLine("<h2 style='background-color:yellow'>Number of Blocks found in the drawing: </h2>");
-                                    file.WriteLine("<table border=1>");
-                                    file.WriteLine("<tr><td>Block Name</td><td>Count</td></tr>");
+                                    file.WriteLine(@"<html>");
+                                    file.WriteLine(@"<head></head>");
+                                    file.WriteLine(@"<body>");
+                                    file.WriteLine(@"<h2 style='background-color:yellow'>Number of Blocks found in the drawing: </h2>");
+                                    file.WriteLine(@"<table border=1>");
+                                    file.WriteLine(@"<tr><td>Block Name</td><td>Count</td></tr>");
                                     foreach (string blockname in arBlocks)
                                     {
-                                        file.Write("<tr><td>Block:" + blockname + " </td><td style='color:blue'>" + arCounts[i] + "</td></tr>");
+                                        file.Write(@"<tr><td>Block:" + blockname + " </td><td style='color:blue'>" + arCounts[i] + "</td></tr>");
                                         i += 1;
                                     }
-                                    file.WriteLine("</table>");
-                                    file.WriteLine("</body>");
-                                    file.WriteLine("</html>");
+                                    file.WriteLine(@"</table>");
+                                    file.WriteLine(@"</body>");
+                                    file.WriteLine(@"</html>");
                                     break;
                             }
                         }
@@ -135,11 +136,11 @@ namespace DrawingStatistics
         private ArrayList GatherBlocksAndCounts()
         {
             ArrayList result = new ArrayList();
-            Database db = doc.Database;
+            Database db = activeDocument.Database;
 
             try
             {
-                using (Transaction trans = db.TransactionManager.StartTransaction())
+                using (Transaction transaction = db.TransactionManager.StartTransaction())
                 {
                     string blockName = "";
                     // Get all the Blocks
@@ -152,7 +153,7 @@ namespace DrawingStatistics
                     int iCount = 0;
                     foreach (ObjectId brId in blks)
                     {
-                        BlockReference br = (BlockReference)trans.GetObject(brId, OpenMode.ForRead);
+                        BlockReference br = (BlockReference)transaction.GetObject(brId, OpenMode.ForRead);
                         blockName = br.Name.ToString();
 
                         if (blkCol.IndexOf(blockName) == -1)
@@ -168,7 +169,7 @@ namespace DrawingStatistics
                     int i;
                     foreach (ObjectId brId in blks)
                     {
-                        BlockReference br = (BlockReference)trans.GetObject(brId, OpenMode.ForRead);
+                        BlockReference br = (BlockReference)transaction.GetObject(brId, OpenMode.ForRead);
                         blockName = br.Name.ToString();
 
                         for (i = 0; i <= iCount - 1; i++)

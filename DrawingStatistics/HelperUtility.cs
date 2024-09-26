@@ -1,36 +1,40 @@
 ﻿using Autodesk.AutoCAD.EditorInput;
+using System;
 using System.IO;
 
 namespace DrawingStatistics
 {
-    public static class HelperUtility
+    internal static class HelperUtility
     {
-        public static bool CheckFile(string filename, Editor edt, string keywordCSV, string keywordTXT, string keywordHTML)
-        {
-            string path = @"C:\Autodesk";
+        const string path = @"C:\Autodesk";
+        const string messageInvalidLocation = @"Incorrect file location";
+        const string messageInvalidFile = @"Incorrect windows file";
+        const string messageFileExtension = @"Incorrect file extension";
+        public static bool CheckFile(Editor edt, params string[] keywordArray)
+        {    
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            string[] fileDetails = filename.Split('\\');
-            if ((fileDetails[0] + fileDetails[1]) != path && fileDetails.Length > 3)
+            string[] fileDetails = keywordArray[0].Split('\\');
+            if ((keywordArray[0] + "\\" + keywordArray[1]) != path && fileDetails.Length > 3)
             {
-                edt.WriteMessage("Incorrect file location");
+                edt.WriteMessage(messageInvalidLocation);
                 return false;
             }
 
             if (!fileDetails[2].Contains("."))
             {
-                edt.WriteMessage("Incorrect windows file");
+                edt.WriteMessage(messageInvalidFile);
                 return false;
             }
 
             string[] fileFormat = fileDetails[2].Split('.');
-            if (fileFormat[1].Trim().ToUpper() != keywordCSV && fileFormat[1].Trim().ToUpper() != keywordTXT && fileFormat[1].Trim().ToUpper() != keywordHTML)
-            {
 
-                edt.WriteMessage("Incorrect file extension");
+            if (!Array.Exists(keywordArray, element => element == fileFormat[1].Trim().ToUpper()))
+            {
+                edt.WriteMessage(messageFileExtension);
                 return false;
             }
 

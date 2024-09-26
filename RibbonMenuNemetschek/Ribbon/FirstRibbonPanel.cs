@@ -2,7 +2,6 @@
 {
     using System.Windows;
     using System.Windows.Controls;
-
     using Autodesk.Internal.Windows;
     using Autodesk.Windows;
 

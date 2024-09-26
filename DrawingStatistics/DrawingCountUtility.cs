@@ -6,18 +6,19 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    public class DrawingCountUtility
+    internal class DrawingCountUtility
     {
         const string keywordScreen = "Screen";
         const string keywordTXT = "TXT";
         const string keywordCSV = "CSV";
         const string keywordHTML = "HTML";
-        readonly string error = "Error encountered: ";
+        const string error = "Error encountered: ";
         const string objectLine = "LINE";
         const string objectMtext = "MTEXT";
         const string objectLwPolyline = "LWPOLYLINE";
         const string objectArc = "ARC";
         const string objectBlock = "INSERT";
+        const string titleMessage = "INSERT";
         readonly Editor edt = Application.DocumentManager.MdiActiveDocument.Editor;
 
         [CommandMethod("CountDrawingObjects")]
@@ -32,7 +33,7 @@ namespace DrawingStatistics
 
             PromptResult res = edt.GetKeywords(pko);
             string answer = res.StringResult;
-            edt.WriteMessage("Your choice is " + answer);
+            edt.WriteMessage("Selected answer is " + answer);
 
             if (answer != null)
             {
@@ -63,9 +64,10 @@ namespace DrawingStatistics
                 {
                     PromptStringOptions pso = new PromptStringOptions("Enter " + answer + " filename and its location (path) in the format C:\\Autodesk\\example.### where ### is the file extension. ");
                     PromptResult pr = edt.GetString(pso);
+                    string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML};
                     filename = pr.StringResult;
 
-                    if (!HelperUtility.CheckFile(filename, edt, keywordCSV, keywordTXT, keywordHTML))
+                    if (!HelperUtility.CheckFile(edt, paramKeyword))
                     {
                         edt.WriteMessage(error);
                     }
@@ -78,7 +80,7 @@ namespace DrawingStatistics
                         switch (answer)
                         {
                             case keywordTXT:
-                                file.WriteLine("\nNumber of Objects found in the drawing: ");
+                                file.WriteLine(titleMessage);
                                 file.WriteLine("\nLines: " + lineCount.ToString());
                                 file.WriteLine("\nMTexts: " + mtxCount.ToString());
                                 file.WriteLine("\nPoylines: " + plCount.ToString());
@@ -87,7 +89,7 @@ namespace DrawingStatistics
                                 file.WriteLine("\nTotal Objects Count: " + totalCount.ToString());
                                 break;
                             case keywordCSV:
-                                file.WriteLine("Number of Objects found in the drawing: ");
+                                file.WriteLine(titleMessage);
                                 file.WriteLine("Lines, MTexts, Polylines, Arcs, Blocks, Total");
                                 file.WriteLine(lineCount.ToString() + "," + mtxCount.ToString() + "," + plCount.ToString() + "," + arcCount.ToString() + "," + blkCount.ToString() + "," + totalCount.ToString());
                                 break;
@@ -122,8 +124,7 @@ namespace DrawingStatistics
                 }
                 else
                 {
-                    // Now, simply display the results on the screen
-                    edt.WriteMessage("\nList of Objects found in the drawing: ");
+                    edt.WriteMessage(titleMessage);
                     edt.WriteMessage("\nLines: " + lineCount.ToString());
                     edt.WriteMessage("\nMTexts: " + mtxCount.ToString());
                     edt.WriteMessage("\nPoylines: " + plCount.ToString());
@@ -140,7 +141,6 @@ namespace DrawingStatistics
 
         private int GetEntityCount(string entityType)
         {
-            // Get all the Objects in the specified entityType
             TypedValue[] tv = new TypedValue[1];
             tv.SetValue(new TypedValue((int)DxfCode.Start, entityType), 0);
             SelectionFilter filter = new SelectionFilter(tv);

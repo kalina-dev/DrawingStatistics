@@ -7,71 +7,69 @@ namespace DrawingStatistics
 {
     internal class DrawingUtility
     {
-        const string Mtext1 = "Rotating MText";
-        const string Mtext2 = "Rotated MText";
-        const short radius1 = 1;
-        const short radius2 = 2;
-        const short radius3 = 3;
-        const short radius4 = 6;
+        const string MtextOne = @"Rotating MText";
+        const string MtextTwo = @"Rotated MText";
+        const string error = @"Error occured: ";
+        const short radiusCircleOne = 1;
+        const short radiusCircleTwo = 2;
+        const short radiusCircleThree = 3;
+        const short radiusCircleFour = 6;
         const short height = 5;
         const short red = 1;
         const short green = 3;
         const short blue = 5;
-        const string error = "Error occured: ";
+        const double angleDegree = 0.5235;
 
         [CommandMethod("CreateAndCopyCircle")]
         public static void CreateAndCopyCircle()
         {
-            // Get the current document and database
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            Document activeDocument = Application.DocumentManager.MdiActiveDocument;
+            Database database = activeDocument.Database;
 
-            // Start a transaction
-            using (Transaction trans = db.TransactionManager.StartTransaction())
+            using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
                 try
                 {
-                    // Open the BlockTable for read
-                    BlockTable bt = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-                    // Open the Block Table record Modelspace for write
-                    BlockTableRecord btr = trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                    BlockTable blockTable = transaction.GetObject(database.BlockTableId, OpenMode.ForRead) as BlockTable;
+                    BlockTableRecord record = transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
 
-                    Circle circleOne = new Circle() { Center = new Point3d(0, 0, 0), Radius = radius1, ColorIndex = red };
-                    btr.AppendEntity(circleOne);
-                    trans.AddNewlyCreatedDBObject(circleOne, true);
+                    Circle circleOne = new Circle() { Center = new Point3d(0, 0, 0), Radius = radiusCircleOne, ColorIndex = red };
+                    record.AppendEntity(circleOne);
+                    transaction.AddNewlyCreatedDBObject(circleOne, true);
 
-                    Circle circleTwo = new Circle() { Center = new Point3d(0, 0, 0), Radius = radius2 };
-                    btr.AppendEntity(circleTwo);
-                    trans.AddNewlyCreatedDBObject(circleTwo, true);
+                    Circle circleTwo = new Circle() { Center = new Point3d(0, 0, 0), Radius = radiusCircleTwo };
+                    record.AppendEntity(circleTwo);
+                    transaction.AddNewlyCreatedDBObject(circleTwo, true);
 
-                    Circle circleThree = new Circle() { Center = new Point3d(30, 30, 0), Radius = radius3, ColorIndex = blue };
-                    btr.AppendEntity(circleThree);
-                    trans.AddNewlyCreatedDBObject(circleThree, true);
+                    Circle circleThree = new Circle() { Center = new Point3d(30, 30, 0), Radius = radiusCircleThree, ColorIndex = blue };
+                    record.AppendEntity(circleThree);
+                    transaction.AddNewlyCreatedDBObject(circleThree, true);
 
-                    // Create a collection and the 3 Circle objects
-                    DBObjectCollection collection = new DBObjectCollection();
-                    collection.Add(circleOne);
-                    collection.Add(circleTwo);
-                    collection.Add(circleThree);
+                    DBObjectCollection collection = new DBObjectCollection
+                    {
+                        circleOne,
+                        circleTwo,
+                        circleThree
+                    };
 
                     foreach (Circle circle in collection)
                     {
-                        if (circle.Radius == radius2)
+                        if (circle.Radius == radiusCircleTwo)
                         {
                             Circle circleFour = circle.Clone() as Circle;
-                            circleFour.ColorIndex = green; // Green
-                            circleFour.Radius = radius4;
-                            btr.AppendEntity(circleFour);
-                            trans.AddNewlyCreatedDBObject(circleFour, true);
+                            circleFour.ColorIndex = green; 
+                            circleFour.Radius = radiusCircleFour;
+                            record.AppendEntity(circleFour);
+                            transaction.AddNewlyCreatedDBObject(circleFour, true);
                         }
                     }
 
-                    trans.Commit();
+                    transaction.Commit();
                 }
                 catch (System.Exception ex)
                 {
-                    doc.Editor.WriteMessage(error + ex.Message);
-                    trans.Abort();
+                    activeDocument.Editor.WriteMessage(error + ex.Message);
+                    transaction.Abort();
                 }
             }
         }
@@ -80,39 +78,39 @@ namespace DrawingStatistics
         [CommandMethod("CreateAndRotateMText")]
         public static void CreateAndRotateMText()
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            Document activeDocument = Application.DocumentManager.MdiActiveDocument;
+            Database database = activeDocument.Database;
 
-            using (Transaction trans = db.TransactionManager.StartTransaction())
+            using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
                 try
                 {
-                    BlockTable bt = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-                    BlockTableRecord btr = trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                    BlockTable blockTable = transaction.GetObject(database.BlockTableId, OpenMode.ForRead) as BlockTable;
+                    BlockTableRecord record = transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
                 
-                    Point3d insPt = new Point3d(10, 10, 0);
-                    MText mtx = new MText() { Location = insPt, Height = height, Contents = Mtext1 };
-                    btr.AppendEntity(mtx);
-                    trans.AddNewlyCreatedDBObject(mtx, true);
+                    Point3d insertionPoint = new Point3d(10, 10, 0);
+                    MText firstText = new MText() { Location = insertionPoint, Height = height, Contents = MtextOne };
+                    record.AppendEntity(firstText);
+                    transaction.AddNewlyCreatedDBObject(firstText, true);
 
-                    MText mtx2 = mtx.Clone() as MText;
-                    mtx2.ColorIndex = red; //red
-                    mtx2.Contents = Mtext2;
+                    MText secondText = firstText.Clone() as MText;
+                    secondText.ColorIndex = red;
+                    secondText.Contents = MtextTwo;
 
-                    btr.AppendEntity(mtx2);
-                    trans.AddNewlyCreatedDBObject(mtx2, true);
+                    record.AppendEntity(secondText);
+                    transaction.AddNewlyCreatedDBObject(secondText, true);
 
-                    Matrix3d curUCSMatrix = doc.Editor.CurrentUserCoordinateSystem;
+                    Matrix3d curUCSMatrix = activeDocument.Editor.CurrentUserCoordinateSystem;
                     CoordinateSystem3d curUCS = curUCSMatrix.CoordinateSystem3d;
-                    mtx2.TransformBy(Matrix3d.Rotation(0.5235, curUCS.Zaxis, new Point3d(0, 0, 0)));
+                    secondText.TransformBy(Matrix3d.Rotation(angleDegree, curUCS.Zaxis, new Point3d(0, 0, 0)));
 
-                    trans.Commit();
-                    doc.SendStringToExecute("._zoom e ", false, false, false);
+                    transaction.Commit();
+                    activeDocument.SendStringToExecute("._zoom e ", false, false, false);
                 }
                 catch (System.Exception ex)
                 {
-                    doc.Editor.WriteMessage(error + ex.Message);
-                    trans.Abort();
+                    activeDocument.Editor.WriteMessage(error + ex.Message);
+                    transaction.Abort();
                 }
             }
         }

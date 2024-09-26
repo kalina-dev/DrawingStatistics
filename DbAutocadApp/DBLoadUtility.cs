@@ -7,27 +7,25 @@ using System;
 
 namespace DbAutocadDemoNemetschek
 {
-    public class DBLoadUtil
+    internal class DBLoadUtility
     {
-        // Load all the Line Objects into Database
         public string LoadLines()
         {
             string result = "";
-            SqlConnection conn = DBUtil.GetConnection();
+            SqlConnection conn = DBUtility.GetConnection();
 
             try
             {
-                // Get the Document and Editor object
-                Document doc = Application.DocumentManager.MdiActiveDocument;
-                Editor ed = doc.Editor;
+                Document activeDocument = Application.DocumentManager.MdiActiveDocument;
+                Editor editor = activeDocument.Editor;
 
-                using (Transaction trans = doc.TransactionManager.StartTransaction())
+                using (Transaction transaction = activeDocument.TransactionManager.StartTransaction())
                 {   
                     TypedValue[] tv = new TypedValue[1];
                     tv.SetValue(new TypedValue((int)DxfCode.Start, "LINE"), 0);
                     SelectionFilter filter = new SelectionFilter(tv);
 
-                    PromptSelectionResult ssPrompt = ed.SelectAll(filter);
+                    PromptSelectionResult ssPrompt = editor.SelectAll(filter);
                     // Check if there is object selected
                     if (ssPrompt.Status == PromptStatus.OK)
                     {
@@ -36,14 +34,14 @@ namespace DbAutocadDemoNemetschek
                         double len = 0.0;
                         Line line = new Line();                        
                         SelectionSet ss = ssPrompt.Value;
-                        String sql = @"INSERT INTO dbo.Lines (StartPtX, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype, Length, Created) 
+                        string sql = @"INSERT INTO dbo.Lines (StartPtX, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype, Length, Created) 
                                        VALUES(@StartPtX, @StartPtY, @EndPtX, @EndPtY, @Layer, @Color, @Linetype, @Length, @Created)";
                         conn.Open();
 
                         // Loop through the selection set and insert into database one line object at a time
                         foreach (SelectedObject sObj in ss)
                         {
-                            line = trans.GetObject(sObj.ObjectId, OpenMode.ForRead) as Line;
+                            line = transaction.GetObject(sObj.ObjectId, OpenMode.ForRead) as Line;
                             startPtX = line.StartPoint.X;
                             startPtY = line.StartPoint.Y;
                             endPtX = line.EndPoint.X;
@@ -68,7 +66,7 @@ namespace DbAutocadDemoNemetschek
                     }
                     else
                     {
-                        ed.WriteMessage("No object selected.");
+                        editor.WriteMessage("No object selected.");
                     }
                     result = "Completed successfully!";
                 }

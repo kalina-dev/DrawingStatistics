@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace DbAutocadDemoNemetschek
 {
-    public class DBRetrieveUtil
+    internal class DBRetrieveUtility
     {        
         public string RetrieveAndDrawLines()
         {
@@ -17,23 +17,23 @@ namespace DbAutocadDemoNemetschek
             SqlConnection conn = new SqlConnection();
             try
             {
-                conn = DBUtil.GetConnection();
+                conn = DBUtility.GetConnection();
                 string sql = "SELECT Id, StartPtx, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype FROM dbo.Lines WHERE IsDeleted IS NULL";
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);                
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {                    
-                    Document doc = Application.DocumentManager.MdiActiveDocument;
-                    Database db = doc.Database;
-                    Editor ed = doc.Editor;
+                    Document activeDocument = Application.DocumentManager.MdiActiveDocument;
+                    Database db = activeDocument.Database;
+                    Editor editor = activeDocument.Editor;
 
-                    doc.LockDocument();
-                    using (Transaction trans = db.TransactionManager.StartTransaction())
+                    activeDocument.LockDocument();
+                    using (Transaction transaction = db.TransactionManager.StartTransaction())
                     {
-                        ed.WriteMessage("Drawing Lines!");
-                        BlockTable bt = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-                        BlockTableRecord btr = trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;                        
+                        editor.WriteMessage("Drawing Lines!");
+                        BlockTable blockTable = transaction.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                        BlockTableRecord record = transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;                        
 
                         int id;
                         string layer="", color="", linetype="";
@@ -54,15 +54,17 @@ namespace DbAutocadDemoNemetschek
                             Point3d pt1 = new Point3d(coords[0], coords[1], 0);
                             Point3d pt2 = new Point3d(coords[2], coords[3], 0);
 
-                            Line ln = new Line(pt1, pt2);
-                            ln.Layer = layer;
-                            ln.Linetype = linetype;
-                            ln.ColorIndex = CommonUtil.GetColorIndex(color);
-                            btr.AppendEntity(ln);
-                            trans.AddNewlyCreatedDBObject(ln, true);
-                            CommonUtil.AddXDataToEntity("AUTOCAD", ln, id);
+                            Line ln = new Line(pt1, pt2)
+                            {
+                                Layer = layer,
+                                Linetype = linetype,
+                                ColorIndex = CommonUtility.GetColorIndex(color)
+                            };
+                            record.AppendEntity(ln);
+                            transaction.AddNewlyCreatedDBObject(ln, true);
+                            CommonUtility.AddXDataToEntity("AUTOCAD", ln, id);
                         }
-                        trans.Commit();
+                        transaction.Commit();
                     }
                 }
                 result = "Completed successfully!";

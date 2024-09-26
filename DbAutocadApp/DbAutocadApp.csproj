@@ -95,10 +95,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonUtil.cs" />
-    <Compile Include="DBLoadUtil.cs" />
-    <Compile Include="DBRetrieveUtil.cs" />
-    <Compile Include="DBUtil.cs" />
+    <Compile Include="CommonUtility.cs" />
+    <Compile Include="DBLoadUtility.cs" />
+    <Compile Include="DBRetrieveUtility.cs" />
+    <Compile Include="DBUtility.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
