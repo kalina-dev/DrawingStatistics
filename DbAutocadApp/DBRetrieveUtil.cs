@@ -65,7 +65,7 @@ namespace DbAutocadDemoNemetschek
                         trans.Commit();
                     }
                 }
-                result = "Done. Completed successfully!";
+                result = "Completed successfully!";
             }
             catch (Exception ex)
             {
