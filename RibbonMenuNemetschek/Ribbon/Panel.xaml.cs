@@ -7,9 +7,6 @@ namespace NemetschekRinnonMenuApp
 {
     using Autodesk.AutoCAD.Internal;
 
-    /// <summary>
-    /// Interaction logic for SamplePanel.xaml
-    /// </summary>
     public partial class Panel : UserControl
     {
         public Panel()

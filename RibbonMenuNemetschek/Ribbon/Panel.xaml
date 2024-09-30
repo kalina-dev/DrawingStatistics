@@ -5,7 +5,7 @@
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
         <Button Name="LineButton" ToolTipService.InitialShowDelay="500" Click="LineButton_OnClick">
             <StackPanel>
-                <Image Source="../Images/Line_32x32.png" Width="32" Height="32"/>
+                <Image Source="../Images/Line_32x32.png" Width="36" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <TextBlock TextAlignment="Center" Height="30" Width="44" Text="Line"/>
             </StackPanel>
             <Button.ToolTip>

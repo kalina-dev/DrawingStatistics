@@ -17,6 +17,7 @@ namespace DrawingStatistics
         private const string error = @"Error encountered: ";
         private const string titleMessage = @"Number of Blocks found in the drawing: ";
         const string promptMessage = @"Select Block Statistics Display Mode: ";
+        const string noOptionSelected = @"No response.";
         readonly Editor editor = Application.DocumentManager.MdiActiveDocument.Editor;
         readonly Document activeDocument = Application.DocumentManager.MdiActiveDocument;
 
@@ -40,7 +41,7 @@ namespace DrawingStatistics
             }
             else
             {
-                editor.WriteMessage(@"No response.");
+                editor.WriteMessage(noOptionSelected);
             }
         }
 

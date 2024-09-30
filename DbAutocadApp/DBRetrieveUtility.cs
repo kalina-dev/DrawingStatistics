@@ -62,7 +62,7 @@ namespace DbAutocadDemoNemetschek
                             };
                             record.AppendEntity(ln);
                             transaction.AddNewlyCreatedDBObject(ln, true);
-                            CommonUtility.AddXDataToEntity("AUTOCAD", ln, id);
+                            CommonUtility.AddXDataToEntity("AUTOCADDB", ln, id);
                         }
                         transaction.Commit();
                     }

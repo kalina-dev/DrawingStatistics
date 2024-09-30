@@ -20,6 +20,7 @@ namespace DrawingStatistics
         const string objectBlock = @"INSERT";
         const string titleMessage = @"Number of objects found in the drawing: ";
         const string promptMessage = @"Select Object Statistics Display Mode: ";
+        const string noOptionSelected = @"No response.";
         readonly Editor editor = Application.DocumentManager.MdiActiveDocument.Editor;
 
         [CommandMethod("CountObjectAndShowStatistics")]
@@ -42,7 +43,7 @@ namespace DrawingStatistics
             }
             else
             {
-                editor.WriteMessage(@"No response.");
+                editor.WriteMessage(noOptionSelected);
             }
         }
 

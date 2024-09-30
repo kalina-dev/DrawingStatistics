@@ -2,12 +2,10 @@
 {
     using Autodesk.AutoCAD.Ribbon;
     using Autodesk.Windows;
-    using Ribbon;
 
     public class RibbonNemetschek
     {
         public const string SAMPLERIBBONSTABID = "RibbonTab";
-
         public const string SAMPLETABTITLE = "Nemetschek";
 
         public static void SetupRibbon()
@@ -42,7 +40,6 @@
             {
                 ribbonTab.Panels.Add(panel1);
             }
-
         }
     }
 }
