@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+	<BaseOutputPath>bin\</BaseOutputPath>   
+     <!--This is to makesure, SQL Data CLient dll is generated for Windows x64-->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>  
+    <Platforms>x64</Platforms>
+	<UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+    <PropertyGroup>
+        <!--Edit ArxSdk to local ObjectARX Path-->
+        <ArxSdk>D:\ArxSDKs\arx2025</ArxSdk>
+        <!--Edit AcadDir to AutoCAD 2025 Install path-->
+        <AcadDir>D:\ACAD\venn\AutoCAD 2025</AcadDir>
+        <ArxMgdPath>$(AcadDir)</ArxMgdPath>        
+        <AssemblySearchPaths>$(ArxSdk)\inc\;$(AssemblySearchPaths)</AssemblySearchPaths>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <!--to acquire Database ConnectionString-->
+        <UserSecretsId>9e90b145-b89d-437c-abe4-51bdd997dcc2</UserSecretsId>
+    </PropertyGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+    </ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="AutoCAD.ObjectARX.2016" Version="1.0.0" />
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />      
+	</ItemGroup>
+</Project>

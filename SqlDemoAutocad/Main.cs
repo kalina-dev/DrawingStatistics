@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace DbAutocadDemoNemetschek
+﻿namespace AutoCAD.SQL.Plugin
 {
     public partial class Main : Form
     {
@@ -22,6 +19,11 @@ namespace DbAutocadDemoNemetschek
             DBRetrieveUtility dbr = new DBRetrieveUtility();
             string result = dbr.RetrieveAndDrawLines();
             lblInfo.Text = result;
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

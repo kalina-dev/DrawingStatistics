@@ -1,7 +1,8 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
+using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
-namespace DbAutocadDemoNemetschek
+namespace AutoCAD.SQL.Plugin
 {
     public static class CommonUtility
     {

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingStatisticsApp", "Dra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RibbonMenuApp", "RibbonMenuNemetschek\RibbonMenuApp.csproj", "{CA3C6CF5-2053-4ADF-BC45-46E29F662632}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbAutocadApp", "DbAutocadApp\DbAutocadApp.csproj", "{819380ED-0D14-4881-83A4-0338DF03A737}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACAD-SQLPlugin", "SqlDemoAutocad\ACAD-SQLPlugin.csproj", "{53396AA3-E7B9-4335-884A-8216E3C5C00F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,14 @@ Global
 		{CA3C6CF5-2053-4ADF-BC45-46E29F662632}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA3C6CF5-2053-4ADF-BC45-46E29F662632}.Release|x64.ActiveCfg = Release|Any CPU
 		{CA3C6CF5-2053-4ADF-BC45-46E29F662632}.Release|x64.Build.0 = Release|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Debug|x64.Build.0 = Debug|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Release|Any CPU.Build.0 = Release|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Release|x64.ActiveCfg = Release|Any CPU
-		{819380ED-0D14-4881-83A4-0338DF03A737}.Release|x64.Build.0 = Release|Any CPU
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Debug|Any CPU.Build.0 = Debug|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Debug|x64.ActiveCfg = Debug|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Debug|x64.Build.0 = Debug|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Release|Any CPU.ActiveCfg = Release|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Release|Any CPU.Build.0 = Release|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Release|x64.ActiveCfg = Release|x64
+		{53396AA3-E7B9-4335-884A-8216E3C5C00F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
