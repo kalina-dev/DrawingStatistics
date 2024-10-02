@@ -9,8 +9,8 @@ namespace AutoCAD.SQL.Plugin
 
         public DatabaseManager()
         {
-            _connectionString = "Server=STZ-LAP-ETM001\\SQLEXPRESS;Database=AUTOCADDB;Integrated Security=True;TrustServerCertificate=Yes";
-        }
+            _connectionString = SettingsDb.Default.connectionString;
+    }
 
         public bool TestSqlServerConnection()
         {
@@ -22,7 +22,7 @@ namespace AutoCAD.SQL.Plugin
                     return true;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Cannot connect to Database server: {ex.Message}");
                 return false;

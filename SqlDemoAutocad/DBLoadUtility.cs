@@ -9,7 +9,7 @@ namespace AutoCAD.SQL.Plugin
 {
     public class DBLoadUtility
     {
-        private readonly string _connectionString = "Server=STZ-LAP-ETM001\\SQLEXPRESS;Database=AUTOCADDB;Integrated Security=True;TrustServerCertificate=Yes";
+        private readonly string _connectionString = SettingsDb.Default.connectionString;
         public string LoadLines()
         {
             var result = "";
@@ -70,7 +70,7 @@ namespace AutoCAD.SQL.Plugin
                         {
                             editor.WriteMessage("No object selected.");
                         }
-                        result = "Completed successfully!";
+                        result = "Data inserted successfully!";
                     }
                 }
                 catch (Exception ex)

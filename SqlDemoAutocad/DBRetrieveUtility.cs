@@ -11,7 +11,7 @@ namespace AutoCAD.SQL.Plugin
 {
     public class DBRetrieveUtility
     {
-        private readonly string _connectionString = "Server=STZ-LAP-ETM001\\SQLEXPRESS;Database=AUTOCADDB;Integrated Security=True;TrustServerCertificate=Yes";
+        private readonly string _connectionString = SettingsDb.Default.connectionString;
         public string RetrieveAndDrawLines()
         {
             string result = "";
@@ -22,7 +22,7 @@ namespace AutoCAD.SQL.Plugin
                 {
                     string sql = "SELECT Id, StartPtx, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype FROM dbo.Lines WHERE IsDeleted IS NULL";
                     SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
-                    DataTable dt = new DataTable();
+                    DataTable dt = new();
                     adapter.Fill(dt);
                     if (dt.Rows.Count > 0)
                     {
@@ -69,7 +69,7 @@ namespace AutoCAD.SQL.Plugin
                             transaction.Commit();
                         }
                     }
-                    result = "Completed successfully!";
+                    result = "Data selected successfully!";
                 }
                 catch (Exception ex)
                 {

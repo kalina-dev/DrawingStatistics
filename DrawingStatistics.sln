@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingStatisticsApp", "Dra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RibbonMenuApp", "RibbonMenuNemetschek\RibbonMenuApp.csproj", "{CA3C6CF5-2053-4ADF-BC45-46E29F662632}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACAD-SQLPlugin", "SqlDemoAutocad\ACAD-SQLPlugin.csproj", "{53396AA3-E7B9-4335-884A-8216E3C5C00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutocadSQLPlugin", "SqlDemoAutocad\AutocadSQLPlugin.csproj", "{53396AA3-E7B9-4335-884A-8216E3C5C00F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,10 +20,5 @@
             string result = dbr.RetrieveAndDrawLines();
             lblInfo.Text = result;
         }
-
-        private void Main_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }
