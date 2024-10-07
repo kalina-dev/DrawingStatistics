@@ -25,7 +25,7 @@
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
     </ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="AutoCAD.ObjectARX.2016" Version="1.0.0" />
+	  <PackageReference Include="AutoCAD.NET" Version="25.0.1" />
 	  <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />      
