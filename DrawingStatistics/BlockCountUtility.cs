@@ -67,7 +67,7 @@ namespace DrawingStatistics
                         
                         filename = promptResult.StringResult;
                         string[] paramKeyword = new string[] { filename, keywordCSV, keywordTXT, keywordHTML };
-                        if (!HelperUtility.CheckFile(editor, paramKeyword))
+                        if (!CommonUtility.CheckFile(editor, paramKeyword))
                         {
                             editor.WriteMessage(error);
                         }

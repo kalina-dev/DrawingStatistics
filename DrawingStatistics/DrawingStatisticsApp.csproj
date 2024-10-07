@@ -82,7 +82,7 @@
     <Compile Include="DrawingCountUtility.cs" />
     <Compile Include="BlockCountUtility.cs" />
     <Compile Include="DrawingUtility.cs" />
-    <Compile Include="HelperUtility.cs" />
+    <Compile Include="CommonUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

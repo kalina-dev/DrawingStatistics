@@ -17,7 +17,7 @@ namespace AutocadSQLPlugin
         {
             try
             {
-                using var connection = new SqlConnection(_connectionString);
+                using SqlConnection connection = new(_connectionString);
                 connection.Open();
                 return true;
             }

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace DrawingStatistics
 {
-    public static class HelperUtility
+    public static class CommonUtility
     {
         const string path = "C:\\Autodesk";
         const string messageInvalidLocation = @"Incorrect file location";
