@@ -1,6 +1,5 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
-using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
 namespace AutocadSQLPlugin
 {

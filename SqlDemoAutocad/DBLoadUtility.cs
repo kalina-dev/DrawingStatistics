@@ -3,7 +3,6 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 using AutoCAD.SQL.Plugin;
 
 namespace AutocadSQLPlugin

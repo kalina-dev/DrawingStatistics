@@ -1,12 +1,11 @@
 ﻿
 using System.Windows;
 using System.Windows.Controls;
-
+using Autodesk.AutoCAD.Internal;
+using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
 namespace NemetschekRinnonMenuApp
 {
-    using Autodesk.AutoCAD.Internal;
-
     public partial class Panel : UserControl
     {
         public Panel()
@@ -16,9 +15,9 @@ namespace NemetschekRinnonMenuApp
 
         private void CancelCommands()
         {
-            if (((short)Autodesk.AutoCAD.ApplicationServices.Core.Application.GetSystemVariable("CMDACTIVE")) != 0)
+            if (((short)Application.GetSystemVariable("CMDACTIVE")) != 0)
             {
-                Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.SendStringToExecute("\x001b\x001b", false, true, false);
+                Application.DocumentManager.MdiActiveDocument.SendStringToExecute("\x001b\x001b", false, true, false);
                 Utils.PostCommandPrompt();
             }
         }
@@ -26,7 +25,7 @@ namespace NemetschekRinnonMenuApp
         private void LineButton_OnClick(object sender, RoutedEventArgs e)
         {
             this.CancelCommands();
-            Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.SendStringToExecute("Line\n", false, true, true);
+            Application.DocumentManager.MdiActiveDocument.SendStringToExecute("Line\n", false, true, true);
         }
     }
 }

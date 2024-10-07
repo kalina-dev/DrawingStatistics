@@ -5,7 +5,6 @@ using Autodesk.AutoCAD.Geometry;
 using DataTable = System.Data.DataTable;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 using AutoCAD.SQL.Plugin;
 
 namespace AutocadSQLPlugin
