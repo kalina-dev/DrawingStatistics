@@ -1,6 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AutoCAD.SQL.Plugin;
+using Microsoft.Data.SqlClient;
 
-namespace AutoCAD.SQL.Plugin
+namespace AutocadSQLPlugin
 {
     public class DatabaseManager : IDisposable
     {
@@ -10,17 +11,15 @@ namespace AutoCAD.SQL.Plugin
         public DatabaseManager()
         {
             _connectionString = SettingsDb.Default.connectionString;
-    }
+        }
 
         public bool TestSqlServerConnection()
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    return true;
-                }
+                using var connection = new SqlConnection(_connectionString);
+                connection.Open();
+                return true;
             }
             catch (Exception ex)
             {

@@ -2,11 +2,11 @@
 using Autodesk.AutoCAD.DatabaseServices;
 using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
-namespace AutoCAD.SQL.Plugin
+namespace AutocadSQLPlugin
 {
     public static class CommonUtility
     {
-         public static int GetColorIndex(string colorName)
+        public static int GetColorIndex(string colorName)
         {
             switch (colorName.ToUpper())
             {
@@ -29,14 +29,14 @@ namespace AutoCAD.SQL.Plugin
                 case "BYLAYER":
                     break;
                 default:
-                    break;                        
+                    break;
             }
             return 7;
         }
-        
+
         public static void AddXDataToEntity(string appName, Entity ent, int xdValue)
         {
-            Document activeDocument = Application.DocumentManager.MdiActiveDocument;
+            Document activeDocument = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument;
             Database database = activeDocument.Database;
             Transaction tr = database.TransactionManager.StartTransaction();
             using (tr)
@@ -46,7 +46,7 @@ namespace AutoCAD.SQL.Plugin
                 if (!regTable.Has(appName))
                 {
                     regTable.UpgradeOpen();
-                    RegAppTableRecord app = new RegAppTableRecord
+                    RegAppTableRecord app = new()
                     {
                         Name = appName
                     };
@@ -54,7 +54,7 @@ namespace AutoCAD.SQL.Plugin
                     tr.AddNewlyCreatedDBObject(app, true);
                 }
 
-                ResultBuffer rb = new ResultBuffer(new TypedValue(1001, appName), new TypedValue((int)DxfCode.ExtendedDataInteger32, xdValue));
+                ResultBuffer rb = new(new TypedValue(1001, appName), new TypedValue((int)DxfCode.ExtendedDataInteger32, xdValue));
                 ent.XData = rb;
                 rb.Dispose();
                 tr.Commit();
