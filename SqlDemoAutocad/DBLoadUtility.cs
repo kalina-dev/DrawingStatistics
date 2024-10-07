@@ -35,7 +35,7 @@ namespace AutocadSQLPlugin
                         double startPtX = 0.0, startPtY = 0.0, endPtX = 0.0, endPtY = 0.0;
                         string layer = "", ltype = "", color = "";
                         double len = 0.0;
-                        Line? line = new();
+                        Line line = new();
                         SelectionSet ss = ssPrompt.Value;
                         string sql = @"INSERT INTO dbo.Lines (StartPtX, StartPtY, EndPtX, EndPtY, Layer, Color, Linetype, Length, Created) 
                                        VALUES(@StartPtX, @StartPtY, @EndPtX, @EndPtY, @Layer, @Color, @Linetype, @Length, @Created)";
@@ -43,7 +43,7 @@ namespace AutocadSQLPlugin
                         // Loop through the selection set and insert into database one line object at a time
                         foreach (SelectedObject sObj in ss)
                         {
-                            line = transaction.GetObject(sObj.ObjectId, OpenMode.ForRead) as Line;
+                            line = (Line)transaction.GetObject(sObj.ObjectId, OpenMode.ForRead);
                             startPtX = line.StartPoint.X;
                             startPtY = line.StartPoint.Y;
                             endPtX = line.EndPoint.X;

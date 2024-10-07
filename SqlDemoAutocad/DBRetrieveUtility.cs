@@ -34,7 +34,7 @@ namespace AutocadSQLPlugin
                         activeDocument.LockDocument();
                         using Transaction transaction = database.TransactionManager.StartTransaction();
                         editor.WriteMessage("Drawing Lines!");
-                        BlockTable blockTable = transaction.GetObject(database.BlockTableId, OpenMode.ForRead) as BlockTable;
+                        BlockTable blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
                         BlockTableRecord? record = transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
 
                         int id;
@@ -49,9 +49,9 @@ namespace AutocadSQLPlugin
                             coords[i + 1] = Convert.ToDouble(dr["StartPtY"]);
                             coords[i + 2] = Convert.ToDouble(dr["EndPtX"]);
                             coords[i + 3] = Convert.ToDouble(dr["EndPtY"]);
-                            layer = dr["Layer"].ToString();
-                            color = dr["Color"].ToString();
-                            linetype = dr["Linetype"].ToString();
+                            layer = dr["Layer"].ToString() ?? "";
+                            color = dr["Color"].ToString() ?? "";
+                            linetype = dr["Linetype"].ToString() ?? "";
 
                             Point3d pt1 = new(coords[0], coords[1], 0);
                             Point3d pt2 = new(coords[2], coords[3], 0);
@@ -62,7 +62,7 @@ namespace AutocadSQLPlugin
                                 Linetype = linetype,
                                 ColorIndex = CommonUtility.GetColorIndex(color)
                             };
-                            ObjectId objectId = record.AppendEntity(ln);
+                            ObjectId objectId = record?.AppendEntity(ln) ?? new();
                             transaction.AddNewlyCreatedDBObject(ln, true);
                             CommonUtility.AddXDataToEntity("AUTOCADDB", ln, id);
                         }

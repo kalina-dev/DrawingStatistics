@@ -1,8 +1,10 @@
-﻿using Autodesk.AutoCAD.Runtime;
+﻿using AutoCAD.SQL.Plugin;
+using AutocadSQLPlugin;
+using Autodesk.AutoCAD.Runtime;
 
-[assembly: CommandClass(typeof(AutoCAD.SQL.Plugin.EntryCommand))]
+[assembly: CommandClass(typeof(EntryCommand))]
 
-namespace AutoCAD.SQL.Plugin
+namespace AutocadSQLPlugin
 {
     public class EntryCommand
     {
@@ -10,25 +12,23 @@ namespace AutoCAD.SQL.Plugin
         public static void ConnectDb()
         {
             var doc = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument;
-            if(doc is null)
+            if (doc is null)
             {
                 return;
-            }   
+            }
             var ed = doc.Editor;
-            using (var data = new DatabaseManager())
+            using var data = new DatabaseManager();
+            try
             {
-                try
-                {
-                    data.TestSqlServerConnection();
-                    ed.WriteMessage("\nConnected to SQL Server database successfully!");
-                    var form = new Main();
-                    form.ShowDialog();
+                data.TestSqlServerConnection();
+                ed.WriteMessage("\nConnected to SQL Server database successfully!");
+                var form = new Main();
+                form.ShowDialog();
 
-                }
-                catch (System.Exception ex)
-                {
-                    ed.WriteMessage($"\nConnecting to SQL Server database failed!\n{ex.Message}");
-                }
+            }
+            catch (System.Exception ex)
+            {
+                ed.WriteMessage($"\nConnecting to SQL Server database failed!\n{ex.Message}");
             }
         }
     }
