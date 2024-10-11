@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 
 namespace AutocadSQLPlugin
 {
-    public static class CommonUtility
+    public class CommonUtility
     {
         public static int GetColorIndex(string colorName)
         {
